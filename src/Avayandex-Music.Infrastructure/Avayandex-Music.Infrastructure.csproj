@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Repositories\Implementations" />
-      <Folder Include="Repositories\Interfaces" />
+        <Folder Include="Repositories\Implementations"/>
+        <Folder Include="Repositories\Interfaces"/>
     </ItemGroup>
 
 </Project>

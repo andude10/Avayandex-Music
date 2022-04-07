@@ -3,10 +3,10 @@
              xmlns:local="using:Avayandex_Music"
              x:Class="Avayandex_Music.App">
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme Mode="Light"/>
+        <FluentTheme Mode="Light" />
     </Application.Styles>
 </Application>
