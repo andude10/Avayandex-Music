@@ -8,8 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Entities\Implementations"/>
-        <Folder Include="Entities\Interfaces"/>
+        <PackageReference Include="KM.Yandex.Music.Api" Version="1.0.0" />
     </ItemGroup>
 
 </Project>

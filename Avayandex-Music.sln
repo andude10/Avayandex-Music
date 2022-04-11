@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avayandex-Music.Presentation", "src\Avayandex-Music.Presentation\Avayandex-Music.Presentation.csproj", "{63F771B9-3C5E-45AA-BAFB-4C10ADC5C7D8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avayandex-Music.Core", "src\Avayandex-Music.Core\Avayandex-Music.Core.csproj", "{3D704FBA-5699-4F9F-A012-4A11917C367A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avayandex-Music.Infrastructure", "src\Avayandex-Music.Infrastructure\Avayandex-Music.Infrastructure.csproj", "{0C63BEE2-378D-4650-BE68-D3F8AC1CED9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avayandex-Music.Presentation", "src\Avayandex-Music.Presentation\Avayandex-Music.Presentation.csproj", "{AF9EE544-EB79-4C57-9150-C8964BD10F31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,10 +12,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{63F771B9-3C5E-45AA-BAFB-4C10ADC5C7D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63F771B9-3C5E-45AA-BAFB-4C10ADC5C7D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63F771B9-3C5E-45AA-BAFB-4C10ADC5C7D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63F771B9-3C5E-45AA-BAFB-4C10ADC5C7D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3D704FBA-5699-4F9F-A012-4A11917C367A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3D704FBA-5699-4F9F-A012-4A11917C367A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D704FBA-5699-4F9F-A012-4A11917C367A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -24,5 +20,9 @@ Global
 		{0C63BEE2-378D-4650-BE68-D3F8AC1CED9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C63BEE2-378D-4650-BE68-D3F8AC1CED9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C63BEE2-378D-4650-BE68-D3F8AC1CED9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF9EE544-EB79-4C57-9150-C8964BD10F31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF9EE544-EB79-4C57-9150-C8964BD10F31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF9EE544-EB79-4C57-9150-C8964BD10F31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF9EE544-EB79-4C57-9150-C8964BD10F31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
