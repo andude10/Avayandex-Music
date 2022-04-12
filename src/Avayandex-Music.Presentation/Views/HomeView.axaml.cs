@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
@@ -6,9 +7,9 @@ using ReactiveUI;
 
 namespace Avayandex_Music.Presentation.Views;
 
-public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
+public partial class HomeView : ReactiveUserControl<HomeViewModel>
 {
-    public MainWindow()
+    public HomeView()
     {
         this.WhenActivated(disposables => { });
         AvaloniaXamlLoader.Load(this);

@@ -1,9 +1,10 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Avayandex_Music.Presentation.App"
              xmlns:local="using:Avayandex_Music"
-             x:Class="Avayandex_Music.App">
+             xmlns:presentation="clr-namespace:Avayandex_Music.Presentation">
     <Application.DataTemplates>
-        <local:ViewLocator />
+        <presentation:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Styles>

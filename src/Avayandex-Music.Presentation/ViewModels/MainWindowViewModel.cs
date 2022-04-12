@@ -1,35 +1,25 @@
 ﻿using System.Reactive;
-using Avayandex_Music.Infrastructure;
 using ReactiveUI;
 
-namespace Avayandex_Music.ViewModels;
+namespace Avayandex_Music.Presentation.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public class MainWindowViewModel : ViewModelBase, IScreen
 {
-    private string _greeting = "Welcome to Avalonia!";
-
     public MainWindowViewModel()
     {
-        ChangeGreetingCommand = ReactiveCommand.Create(ChangeGreeting);
-        AuthorizeCommand = ReactiveCommand.Create(Authorize);
+        GoNext = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new HomeViewModel(this))
+        );
     }
 
-    public string Greeting
-    {
-        get => _greeting;
-        set => this.RaiseAndSetIfChanged(ref _greeting, value);
-    }
+#region Navigation
 
-    public ReactiveCommand<Unit, Unit> AuthorizeCommand { get; }
+    public RoutingState Router { get; } = new RoutingState();
+    
+    public ReactiveCommand<Unit, IRoutableViewModel?> GoBack => Router.NavigateBack;
+    
+    public ReactiveCommand<Unit, IRoutableViewModel> GoNext { get; }
 
-    public ReactiveCommand<Unit, Unit> ChangeGreetingCommand { get; }
+#endregion
 
-    private void ChangeGreeting()
-    {
-        Greeting = "yup a";
-    }
-
-    private static void Authorize()
-    {
-    }
 }

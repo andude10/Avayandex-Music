@@ -3,8 +3,8 @@ using System.Text;
 
 namespace Avayandex_Music.Core.Security;
 
-// got from https://stackoverflow.com/questions/10168240/encrypting-decrypting-a-string-in-c-sharp
-public static class StorageEncryptionService
+// copied from https://stackoverflow.com/questions/10168240/encrypting-decrypting-a-string-in-c-sharp
+public static class StorageEncryption
 {
     private const int KeySize = 256;
 
@@ -18,7 +18,7 @@ public static class StorageEncryptionService
         using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
         {
             var keyBytes = password.GetBytes(KeySize / 8);
-            using (var symmetricKey = new RijndaelManaged())
+            using (var symmetricKey = Aes.Create())
             {
                 symmetricKey.BlockSize = 256;
                 symmetricKey.Mode = CipherMode.CBC;
@@ -61,7 +61,7 @@ public static class StorageEncryptionService
         using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
         {
             var keyBytes = password.GetBytes(KeySize / 8);
-            using (var symmetricKey = new RijndaelManaged())
+            using (var symmetricKey = Aes.Create())
             {
                 symmetricKey.BlockSize = 256;
                 symmetricKey.Mode = CipherMode.CBC;
@@ -87,11 +87,8 @@ public static class StorageEncryptionService
     private static byte[] Generate256BitsOfRandomEntropy()
     {
         var randomBytes = new byte[32]; // 32 Bytes will give us 256 bits.
-        using (var rngCsp = new RNGCryptoServiceProvider())
-        {
-            // Fill the array with cryptographically secure random bytes.
-            rngCsp.GetBytes(randomBytes);
-        }
+        using var rnd = RandomNumberGenerator.Create();
+        rnd.GetBytes(randomBytes);
 
         return randomBytes;
     }

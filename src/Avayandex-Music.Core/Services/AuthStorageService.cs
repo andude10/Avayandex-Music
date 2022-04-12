@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
 using System.Text.Json;
+using Avayandex_Music.Core.Security;
 using Yandex.Music.Api.Common;
 
-
-namespace Avayandex_Music.Core.Security;
+namespace Avayandex_Music.Core.Services;
 
 public static class AuthStorageService
 {
@@ -29,7 +29,7 @@ public static class AuthStorageService
         var json = await File.ReadAllTextAsync(StorageFileName);
         var pass = CreateStoragePassword();
 
-        var encryptJson = StorageEncryptionService.Encrypt(json, pass);
+        var encryptJson = StorageEncryption.Encrypt(json, pass);
         await File.WriteAllTextAsync(StorageFileName, encryptJson);
     }
 

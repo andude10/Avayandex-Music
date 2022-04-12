@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Repositories\Implementations"/>
-        <Folder Include="Repositories\Interfaces"/>
+        <Folder Include="Repositories\Implementations" />
+        <Folder Include="Repositories\Interfaces" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="KM.Yandex.Music.Api" Version="1.0.0"/>
+        <PackageReference Include="KM.Yandex.Music.Api" Version="1.0.0" />
     </ItemGroup>
 
 </Project>

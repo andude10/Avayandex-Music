@@ -11,4 +11,9 @@
         <PackageReference Include="KM.Yandex.Music.Api" Version="1.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Services\Implementations" />
+      <Folder Include="Services\Interfaces" />
+    </ItemGroup>
+
 </Project>

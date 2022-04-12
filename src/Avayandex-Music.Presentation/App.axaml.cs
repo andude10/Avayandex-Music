@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avayandex_Music.ViewModels;
-using Avayandex_Music.Views;
+using Avayandex_Music.Presentation.ViewModels;
+using MainWindow = Avayandex_Music.Presentation.Views.MainWindow;
 
-namespace Avayandex_Music;
+namespace Avayandex_Music.Presentation;
 
 public class App : Application
 {
