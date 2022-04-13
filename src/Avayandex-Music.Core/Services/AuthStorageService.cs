@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
-using System.Text.Json;
+using Avayandex_Music.Core.Models;
+using Newtonsoft.Json;
 using Avayandex_Music.Core.Security;
 using Yandex.Music.Api.Common;
 
@@ -7,43 +8,53 @@ namespace Avayandex_Music.Core.Services;
 
 public static class AuthStorageService
 {
-    private const string StorageFileName = "storage.json";
-    private const string StoragePasswordFileName = "stpswd.txt";
+    private const string AuthDataFileName = "storage.txt";
+    private const string AuthDataKeyFileName = "stkey.txt";
+    private static AuthStorage _authStorage;
+    private static object AuthStorageLocker = new object();
 
-    public static async Task<AuthStorage?> GetAuthStorageAsync()
+    // not done yet
+    public static AuthStorage? GetAuthStorage()
     {
-        await using var openStream = File.OpenRead(StorageFileName);
+        lock (AuthStorageLocker)
+        {
+            if (!File.Exists(AuthDataFileName)) return null;
+            if (!File.Exists(AuthDataKeyFileName)) return null;
+            
+            var encryptedJson = File.ReadAllText(AuthDataFileName);
+            var key = File.ReadAllText(AuthDataKeyFileName);
 
-        var authStorage = await JsonSerializer.DeserializeAsync<AuthStorage>(openStream);
-        await openStream.DisposeAsync();
+            var json = StorageEncryption.Decrypt(encryptedJson, key);
+            var authData = JsonConvert.DeserializeObject<AuthData>(json);
 
-        return authStorage;
+            return new AuthStorage();
+        }
     }
 
-    public static async Task SaveAuthStorageAsync(AuthStorage authStorage)
+    
+    public static async Task SaveAuthData(AuthData authData)
     {
-        await using var createStream = File.Create(StorageFileName);
-        await JsonSerializer.SerializeAsync(createStream, authStorage);
-        await createStream.DisposeAsync();
+        await File.WriteAllTextAsync(AuthDataFileName, 
+            JsonConvert.SerializeObject(authData));
         
-        var json = await File.ReadAllTextAsync(StorageFileName);
-        var pass = CreateStoragePassword();
+        var json = await File.ReadAllTextAsync(AuthDataFileName);
+        
+        var key = CreateStorageKey();
+        await File.WriteAllTextAsync(AuthDataKeyFileName, key);
 
-        var encryptJson = StorageEncryption.Encrypt(json, pass);
-        await File.WriteAllTextAsync(StorageFileName, encryptJson);
+        var encryptedJson = StorageEncryption.Encrypt(json, key);
+        await File.WriteAllTextAsync(AuthDataFileName, encryptedJson);
     }
 
-    private static string CreateStoragePassword()
+    private static string CreateStorageKey()
     {
         using var cryptRng = RandomNumberGenerator.Create();
-        var tokenBuffer = new byte[50];
+        var tokenBuffer = new byte[16];
         
         cryptRng.GetBytes(tokenBuffer);
         
-        var pass = Convert.ToBase64String(tokenBuffer);
-        
-        File.WriteAllText(StoragePasswordFileName, pass);
+        var key = Convert.ToBase64String(tokenBuffer);
 
-        return pass;
+        return key;
     }
 }
