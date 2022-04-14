@@ -2,7 +2,11 @@ using System;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avayandex_Music.Core.Services;
+using Avayandex_Music.Core.Services.Implementations;
+using Avayandex_Music.Core.Services.Interfaces;
+using Avayandex_Music.Presentation.Utilities.Interactions;
 using ReactiveUI;
+using Splat;
 
 namespace Avayandex_Music.Presentation.ViewModels;
 
@@ -11,6 +15,7 @@ public class LoginViewModel : ViewModelBase
     public LoginViewModel()
     {
         TryLoginCommand = ReactiveCommand.CreateFromTask(TryLogin);
+        TryAutoLoginCommand = ReactiveCommand.CreateFromTask(TryAutoLogin);
     }
 
 #region Fields
@@ -38,12 +43,7 @@ public class LoginViewModel : ViewModelBase
 #region Commands
 
     public ReactiveCommand<Unit, Unit> TryLoginCommand { get; }
-
-#endregion
-
-#region Interactions
-
-    public readonly Interaction<Unit, Unit> ShowMainWindow = new Interaction<Unit, Unit>();
+    public ReactiveCommand<Unit, Unit> TryAutoLoginCommand { get; }
 
 #endregion
 
@@ -51,13 +51,36 @@ public class LoginViewModel : ViewModelBase
 
     private async Task TryLogin()
     {
-        var isSuccessful = await AuthorizationService.Authorize(Login, Password);
+        var loginService = Locator.Current.GetService<ILoginService>()
+                           ?? throw new InvalidOperationException();
+        
+        var isSuccessful = await loginService.AuthorizeAsync(Login, Password);
 
         if (isSuccessful)
         {
-            ShowMainWindow.Handle(Unit.Default);
+            LoginInteractions.ShowMainWindow.Handle(Unit.Default);
         }
     }
+    
+    private async Task TryAutoLogin()
+    {
+        LoginInteractions.ShowLoadScreen.Handle(Unit.Default).Subscribe();
+        
+        var loginService = Locator.Current.GetService<ILoginService>()
+                           ?? throw new InvalidOperationException();
+        
+        var isSuccessful = await loginService.AuthorizeAsync();
+
+        if (isSuccessful)
+        {
+            LoginInteractions.ShowMainWindow.Handle(Unit.Default).Subscribe();
+        }
+        else
+        {
+            LoginInteractions.HideLoadScreen.Handle(Unit.Default).Subscribe();
+        }
+    }
+
 
 #endregion
     

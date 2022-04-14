@@ -54,4 +54,16 @@ public static class StorageEncryption
 
         return cipherText;
     }
+    
+    public static string CreateStorageKey()
+    {
+        using var cryptRng = RandomNumberGenerator.Create();
+        var tokenBuffer = new byte[16];
+        
+        cryptRng.GetBytes(tokenBuffer);
+        
+        var key = Convert.ToBase64String(tokenBuffer);
+
+        return key;
+    }
 }
