@@ -13,30 +13,40 @@
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="*,Auto">
-        
-        <rxui:RoutedViewHost Grid.Row="0" Router="{Binding Router}">
+    <Grid ColumnDefinitions="Auto, *">
+
+        <Border BorderThickness="2"
+                BorderBrush="Gray">
+            <StackPanel Orientation="Vertical"
+                        Margin="15">
+                <StackPanel.Styles>
+                    <Style Selector="StackPanel > :is(Control)">
+                        <Setter Property="Margin" Value="2" />
+                    </Style>
+                    <Style Selector="StackPanel > TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </StackPanel.Styles>
+
+                <Button Width="100"
+                        Command="{Binding NavigateToHomeCommand}">
+                    <TextBlock Text="Home"
+                               TextAlignment="Center" />
+                </Button>
+                <Button Width="100"
+                        Command="{Binding NavigateToMyMusicCommand}">
+                    <TextBlock Text="My music"
+                               TextAlignment="Center" />
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <rxui:RoutedViewHost Grid.Column="1" Router="{Binding Router}">
             <rxui:RoutedViewHost.DefaultContent>
                 <TextBlock Text="Default content"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
             </rxui:RoutedViewHost.DefaultContent>
         </rxui:RoutedViewHost>
-        
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="15">
-            <StackPanel.Styles>
-                <Style Selector="StackPanel > :is(Control)">
-                    <Setter Property="Margin" Value="2"/>
-                </Style>
-                <Style Selector="StackPanel > TextBlock">
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                </Style>
-            </StackPanel.Styles>
-            
-            <Button Content="Go next" Command="{Binding GoNext}" />
-            <Button Content="Go back" Command="{Binding GoBack}" />
-            <TextBlock Text="{Binding Router.NavigationStack.Count}" />
-            
-        </StackPanel>
     </Grid>
 </Window>

@@ -1,6 +1,5 @@
 using Avayandex_Music.Core.Security;
-using Avayandex_Music.Core.Services.Interfaces;
-using Newtonsoft.Json;
+using Avayandex_Music.Core.Services.Abstractions;
 using Yandex.Music.Api;
 
 namespace Avayandex_Music.Core.Services.Implementations;
@@ -9,49 +8,44 @@ public class LoginService : ILoginService
 {
     private const string TokenFileName = "tken.txt";
     private const string AuthDataKeyFileName = "stkey.txt";
-    
+
     /// <summary>
-    /// Login and password authorization
+    ///     Login and password authorization
     /// </summary>
     /// <returns>Authorization result. True if successful, false if not/</returns>
     public async Task<bool> AuthorizeAsync(string login, string password)
     {
         var authStorage = AuthStorageService.GetInstance();
         authStorage.User.Login = login;
-        
+
         var api = new YandexMusicApi();
         await api.User.AuthorizeAsync(authStorage, authStorage.User.Login, password);
 
-        if (authStorage.IsAuthorized)
-        {
-            await SaveTokenAsync(authStorage.Token);
-        }
-        
+        if (authStorage.IsAuthorized) await SaveTokenAsync(authStorage.Token);
+
         return authStorage.IsAuthorized;
     }
 
     /// <summary>
-    /// Authorization based on token that was saved earlier.
+    ///     Authorization based on token that was saved earlier.
     /// </summary>
     /// <returns>Authorization result. True if successful, false if not.</returns>
     public async Task<bool> AuthorizeAsync()
     {
-        if (!File.Exists(TokenFileName) && 
+        if (!File.Exists(TokenFileName) &&
             !File.Exists(AuthDataKeyFileName)) return false;
 
         // Get data for authentication
         var key = File.ReadAllText(AuthDataKeyFileName);
         var token = StorageEncryption.Decrypt(File.ReadAllText(TokenFileName), key);
-        
+
         if (token == null)
-        {
-            throw new NullReferenceException("Token is null. Most likely, " 
+            throw new NullReferenceException("Token is null. Most likely, "
                                              + "the problem arose during decryption");
-        }
-        
+
         // Authentication
         var authStorage = AuthStorageService.GetInstance();
-        
+
         var api = new YandexMusicApi();
         await api.User.AuthorizeAsync(authStorage, token);
 

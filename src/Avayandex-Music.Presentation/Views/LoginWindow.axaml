@@ -2,23 +2,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d"
         x:Class="Avayandex_Music.Presentation.Views.LoginWindow"
+        Height="300" Width="400"
         Title="AuthorizationWindow">
-    
-    <StackPanel Margin="15">
-        
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Margin="5">Enter login</TextBlock>
-            <TextBox x:Name="LoginTextBox"></TextBox>
+
+    <Grid Margin="15">
+
+        <TextBlock Margin="10"
+                   FontWeight="Heavy"
+                   FontSize="20"
+                   VerticalAlignment="Top"
+                   TextAlignment="Center">
+            Yandex account authorization
+        </TextBlock>
+
+        <StackPanel Margin="15,50,15,15">
+            <TextBlock Margin="5">
+                Enter login
+            </TextBlock>
+            <TextBox x:Name="LoginTextBox"
+                     Margin="5" />
+            <TextBlock Margin="5">
+                Enter password
+            </TextBlock>
+            <TextBox x:Name="PasswordTextBox"
+                     Margin="5" />
+            <Button Margin="5"
+                    x:Name="TryLoginButton"
+                    FontWeight="Bold">
+                Login
+            </Button>
         </StackPanel>
-        
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Margin="5">Enter password</TextBlock>
-            <TextBox x:Name="PasswordTextBox"></TextBox>
-        </StackPanel>
-        
-        <Button Margin="5"
-                x:Name="TryLoginButton">Login</Button>
-    </StackPanel>
+    </Grid>
 </Window>

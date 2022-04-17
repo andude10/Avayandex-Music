@@ -7,19 +7,21 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 {
     public MainWindowViewModel()
     {
-        GoNext = ReactiveCommand.CreateFromObservable(
+        NavigateToHomeCommand = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new HomeViewModel(this))
+        );
+        NavigateToMyMusicCommand = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new MyMusicViewModel(this))
         );
     }
 
 #region Navigation
 
-    public RoutingState Router { get; } = new RoutingState();
-    
-    public ReactiveCommand<Unit, IRoutableViewModel?> GoBack => Router.NavigateBack;
-    
-    public ReactiveCommand<Unit, IRoutableViewModel> GoNext { get; }
+    public RoutingState Router { get; } = new();
+
+    public ReactiveCommand<Unit, IRoutableViewModel> NavigateToMyMusicCommand { get; }
+
+    public ReactiveCommand<Unit, IRoutableViewModel> NavigateToHomeCommand { get; }
 
 #endregion
-
 }

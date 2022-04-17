@@ -3,9 +3,9 @@ using ReactiveUI;
 
 namespace Avayandex_Music.Presentation.ViewModels;
 
-public class HomeViewModel : ViewModelBase, IRoutableViewModel
+public class MyMusicViewModel : ViewModelBase, IRoutableViewModel
 {
-    public HomeViewModel(IScreen screen)
+    public MyMusicViewModel(IScreen screen)
     {
         HostScreen = screen;
     }

@@ -1,8 +1,5 @@
-using System;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -22,27 +19,27 @@ public partial class LoginWindow : ReactiveWindow<LoginViewModel>
         {
             await Observable.Range(0, 1).ObserveOn(RxApp.MainThreadScheduler);
             if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
-            
-            this.Hide();
+
+            Hide();
             desktop.MainWindow = new MainWindow
             {
                 DataContext = new MainWindowViewModel()
             };
             desktop.MainWindow.Show();
         });
-        
+
         LoginInteractions.HideLoadScreen.RegisterHandler(async _ =>
         {
             await Observable.Range(0, 1).ObserveOn(RxApp.MainThreadScheduler);
-            this.Show();
+            Show();
         });
-        
+
         LoginInteractions.ShowLoadScreen.RegisterHandler(async _ =>
         {
             await Observable.Range(0, 1).ObserveOn(RxApp.MainThreadScheduler);
-            this.Hide();
+            Hide();
         });
-        
+
         this.WhenActivated(d =>
         {
             d(this.Events().Activated
@@ -61,11 +58,10 @@ public partial class LoginWindow : ReactiveWindow<LoginViewModel>
     }
 
 #region Find Properties
-    
+
     public TextBox FindLoginTextBox => this.FindControl<TextBox>("LoginTextBox");
     public TextBox FindPasswordTextBox => this.FindControl<TextBox>("PasswordTextBox");
     public Button FindTryLoginButton => this.FindControl<Button>("TryLoginButton");
 
 #endregion
-    
 }
