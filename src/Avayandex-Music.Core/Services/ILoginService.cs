@@ -1,4 +1,4 @@
-namespace Avayandex_Music.Core.Services.Abstractions;
+namespace Avayandex_Music.Core.Services;
 
 public interface ILoginService
 {

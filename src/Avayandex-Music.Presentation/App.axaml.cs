@@ -1,12 +1,13 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avayandex_Music.Core.Services.Abstractions;
-using Avayandex_Music.Core.Services.Implementations;
+using Avayandex_Music.Core.Playbacks.Audio;
+using Avayandex_Music.Core.Players.Audio.Music;
+using Avayandex_Music.Core.Services;
+using Avayandex_Music.Core.Storages;
 using Avayandex_Music.Presentation.ViewModels;
 using Avayandex_Music.Presentation.Views;
 using Splat;
-using MusicStorage = Avayandex_Music.Core.Services.Abstractions.MusicStorage;
 
 namespace Avayandex_Music.Presentation;
 
@@ -20,8 +21,9 @@ public class App : Application
     public override void RegisterServices()
     {
         Locator.CurrentMutable.Register(() => new LoginService(), typeof(ILoginService));
-        Locator.CurrentMutable.Register(() => new MusicFileStorage(), typeof(MusicStorage));
-        Locator.CurrentMutable.Register(() => new VlcMusicPlayer(new MusicFileStorage()), typeof(MusicPlayer));
+        Locator.CurrentMutable.Register(() => new FileStorage(), typeof(Storage));
+        Locator.CurrentMutable.Register(() => new MusicPlayer(new FileStorage(), new VlcPlaybackAudio()),
+            typeof(IMusicPlayer));
         base.RegisterServices();
     }
 

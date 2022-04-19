@@ -1,8 +1,7 @@
 using Avayandex_Music.Core.Security;
-using Avayandex_Music.Core.Services.Abstractions;
 using Yandex.Music.Api;
 
-namespace Avayandex_Music.Core.Services.Implementations;
+namespace Avayandex_Music.Core.Services;
 
 public class LoginService : ILoginService
 {
@@ -37,7 +36,7 @@ public class LoginService : ILoginService
 
         // Get data for authentication
         var key = File.ReadAllText(AuthDataKeyFileName);
-        var token = StorageEncryption.Decrypt(File.ReadAllText(TokenFileName), key);
+        var token = AuthStorageEncryption.Decrypt(File.ReadAllText(TokenFileName), key);
 
         if (token == null)
             throw new NullReferenceException("Token is null. Most likely, "
@@ -54,10 +53,10 @@ public class LoginService : ILoginService
 
     private async Task SaveTokenAsync(string token)
     {
-        var key = StorageEncryption.CreateStorageKey();
+        var key = AuthStorageEncryption.CreateStorageKey();
         await File.WriteAllTextAsync(AuthDataKeyFileName, key);
 
-        var encryptedToken = StorageEncryption.Encrypt(token, key);
+        var encryptedToken = AuthStorageEncryption.Encrypt(token, key);
         await File.WriteAllTextAsync(TokenFileName, encryptedToken);
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Reactive;
 using System.Threading.Tasks;
-using Avayandex_Music.Core.Services.Abstractions;
+using Avayandex_Music.Core.Services;
 using Avayandex_Music.Presentation.Utilities.Interactions;
 using ReactiveUI;
 using Splat;
