@@ -11,7 +11,25 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
 {
     public HomeView()
     {
-        this.WhenActivated(disposables => { });
+        this.WhenActivated(d =>
+        {
+            d(this.BindCommand(ViewModel, vm => vm.FindTrackCommand,
+                view => view.FindFindTrackButton));
+            d(this.BindCommand(ViewModel, vm => vm.PlayCommand,
+                view => view.FindPlayTrackButton));
+            d(this.BindCommand(ViewModel, vm => vm.StopCommand,
+                view => view.FindStopTrackButton));
+        });
         AvaloniaXamlLoader.Load(this);
     }
+    
+    
+
+#region Find Properties
+
+    public Button FindFindTrackButton => this.FindControl<Button>("FindTrackButton");
+    public Button FindPlayTrackButton => this.FindControl<Button>("PlayTrackButton");
+    public Button FindStopTrackButton => this.FindControl<Button>("StopTrackButton");
+
+#endregion
 }

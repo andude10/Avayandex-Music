@@ -8,7 +8,7 @@ public abstract class Storage
     ///     Loads track into the storage and returns the full file name
     /// </summary>
     /// <returns></returns>
-    public abstract Task<string> LoadTrackAsync(YTrack track);
+    public abstract Task<string> LoadTrack(YTrack? track);
 
     /// <summary>
     ///     If the file with this id is in storage, returns its full file name

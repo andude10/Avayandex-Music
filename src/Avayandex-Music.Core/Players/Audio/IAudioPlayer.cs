@@ -1,44 +1,45 @@
 using System.Reactive;
+using Avayandex_Music.Core.Playbacks;
 using ReactiveUI;
 
 namespace Avayandex_Music.Core.Players.Audio;
 
 public interface IAudioPlayer
 {
-    public enum State
-    {
-        Playing,
-        Stopped
-    }
-
     /// <summary>
-    ///     Command to play the current audio.
+    ///     Select the audio to play
+    ///     CanExecute is false when the last audio in the list is playing
+    /// </summary>
+    public ReactiveCommand<int, Unit> SelectCommand { get; }
+    
+    /// <summary>
+    ///     Play the audio.
     ///     CanExecute equals false, when the current audio is already playing
     /// </summary>
     public ReactiveCommand<Unit, Unit> PlayCommand { get; }
 
     /// <summary>
-    ///     Command to play the next or first audio in the list.
+    ///     SelectCommand the next audio to play
     ///     CanExecute equals false, when the last audio in the list is playing
     /// </summary>
-    public ReactiveCommand<Unit, Unit> PlayNextCommand { get; }
+    public ReactiveCommand<Unit, Unit> SelectNextCommand { get; }
 
     /// <summary>
-    ///     Command to play the previous audio in the list.
+    ///     SelectCommand previous the next audio to play
     ///     CanExecute is false when the last audio in the list is playing
     /// </summary>
-    public ReactiveCommand<Unit, Unit> PlayPreviousCommand { get; }
+    public ReactiveCommand<Unit, Unit> SelectPreviousCommand { get; }
 
     /// <summary>
-    ///     Stops playing the current audio.
+    ///     Pause playing the audio.
     ///     CanExecute is false when the audio is already stopped.
     /// </summary>
-    public ReactiveCommand<Unit, Unit> StopCommand { get; }
+    public ReactiveCommand<Unit, Unit> PauseCommand { get; }
 
 #region Properties
 
-    public State CurrentState { get; }
-    public object CurrentStateLocker { get; }
+    public PlaybackState State { get; }
 
 #endregion
+    
 }

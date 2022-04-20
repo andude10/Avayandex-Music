@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="KM.Yandex.Music.Api" Version="1.0.0" />
+        <PackageReference Include="KM.Yandex.Music.Client" Version="1.0.0" />
         <PackageReference Include="LibVLCSharp" Version="3.6.6" />
         <PackageReference Include="ReactiveUI" Version="17.1.50" />
     </ItemGroup>

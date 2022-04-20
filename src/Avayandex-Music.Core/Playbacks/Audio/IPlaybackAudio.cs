@@ -1,8 +1,12 @@
+using Avayandex_Music.Core.Storages;
+
 namespace Avayandex_Music.Core.Playbacks.Audio;
 
 public interface IPlaybackAudio
 {
-    public void SetupAudio(string audioPath);
+    public PlaybackState State { get; } 
+        
+    public void SetupAudio(string filePath);
     public void Play();
-    public void Stop();
+    public void Pause();
 }

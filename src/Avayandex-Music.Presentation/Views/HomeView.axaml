@@ -7,6 +7,15 @@
     <StackPanel HorizontalAlignment="Center"
                 VerticalAlignment="Center">
         <TextBlock Text="Hi, I'm the first view!" />
+        <Button x:Name="FindTrackButton"
+                Content="Find track"
+                Margin="10"/>
+        <Button x:Name="PlayTrackButton"
+                Content="Play music"
+                Margin="10"/>
+        <Button x:Name="StopTrackButton"
+                Content="Pause music"
+                Margin="10"/>
         <TextBlock Text="{Binding UrlPathSegment}" />
     </StackPanel>
 </UserControl>
