@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.ReactiveUI;
-using Avayandex_Music.Presentation.ViewModels;
+using Avayandex_Music.Presentation.ViewModels.Views;
 using Avayandex_Music.Presentation.Views;
 using ReactiveUI;
 using Splat;

@@ -5,32 +5,40 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avayandex_Music.Core.Players.Audio.Music;
 using Avayandex_Music.Core.Services;
+using Avayandex_Music.Presentation.ViewModels.Views.Controls;
 using DynamicData;
 using ReactiveUI;
 using Splat;
 using Yandex.Music.Api;
-using Yandex.Music.Api.Models.Track;
 
-namespace Avayandex_Music.Presentation.ViewModels;
+namespace Avayandex_Music.Presentation.ViewModels.Views;
 
 public class HomeViewModel : ViewModelBase, IRoutableViewModel
 {
-
 #region Fields
 
-    private IMusicPlayer _musicPlayer;
+    private readonly IMusicPlayer _musicPlayer;
 
 #endregion
-    
+
     public HomeViewModel(IScreen screen)
     {
         HostScreen = screen;
+
         FindTrackCommand = ReactiveCommand.CreateFromTask(FindTrack);
-        PlayCommand = ReactiveCommand.Create(PlayTrack);
+        PlayCommand = ReactiveCommand.CreateFromTask(PlayTrackAsync);
         StopCommand = ReactiveCommand.Create(StopTrack);
-        _musicPlayer = Locator.Current.GetService<IMusicPlayer>() 
+
+        _musicPlayer = Locator.Current.GetService<IMusicPlayer>()
                        ?? throw new InvalidOperationException();
+        SmartPlaylistsViewModel = new SmartPlaylistsViewModel();
     }
+
+#region Properties
+
+    public SmartPlaylistsViewModel SmartPlaylistsViewModel { get; set; }
+
+#endregion
 
 #region IRoutableViewModel
 
@@ -47,6 +55,11 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     public ReactiveCommand<Unit, Unit> PlayCommand { get; }
     public ReactiveCommand<Unit, Unit> StopCommand { get; }
 
+    /// <summary>
+    ///     Commands to start a background download of data
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> LoadDataCommand { get; }
+
 #endregion
 
 #region Methods
@@ -62,18 +75,25 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     }
 
     // test method
-    public void PlayTrack()
+    public async Task PlayTrackAsync()
     {
-        _musicPlayer.SelectCommand.Execute(0);
-        _musicPlayer.PlayCommand.Execute();
+        _musicPlayer.SelectCommand.Execute(0).Subscribe();
+        await _musicPlayer.PlayAsyncCommand.Execute();
     }
-    
+
+    /// <summary>
+    ///     Starts a background download of data
+    /// </summary>
+    public async Task LoadDataAsync()
+    {
+        await SmartPlaylistsViewModel.LoadSmartPlaylistsCommand.Execute();
+    }
+
     // test method
     public void StopTrack()
     {
-        _musicPlayer.PauseCommand.Execute();
+        _musicPlayer.PauseCommand.Execute().Subscribe();
     }
 
 #endregion
-    
 }

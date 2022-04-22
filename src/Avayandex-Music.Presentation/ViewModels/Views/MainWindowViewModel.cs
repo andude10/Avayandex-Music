@@ -1,7 +1,7 @@
 ﻿using System.Reactive;
 using ReactiveUI;
 
-namespace Avayandex_Music.Presentation.ViewModels;
+namespace Avayandex_Music.Presentation.ViewModels.Views;
 
 public class MainWindowViewModel : ViewModelBase, IScreen
 {

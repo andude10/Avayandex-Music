@@ -3,7 +3,6 @@ using Avayandex_Music.Core.Playbacks;
 using Avayandex_Music.Core.Playbacks.Audio;
 using Avayandex_Music.Core.Storages;
 using DynamicData;
-using LibVLCSharp.Shared;
 using ReactiveUI;
 using Yandex.Music.Api.Models.Track;
 
@@ -16,18 +15,18 @@ public class MusicPlayer : IMusicPlayer
         _storage = storage;
         _playbackAudio = playbackAudio;
 
-        PlayCommand = ReactiveCommand.CreateFromTask(Play);
-        SelectCommand = ReactiveCommand.CreateFromTask<int>(Select);
+        PlayAsyncCommand = ReactiveCommand.CreateFromTask(LoadAndPlayAsync);
+        SelectCommand = ReactiveCommand.Create<int>(Select);
         SelectNextCommand = ReactiveCommand.Create(SelectNext);
         SelectPreviousCommand = ReactiveCommand.Create(SelectPrevious);
-        PauseCommand = ReactiveCommand.CreateFromTask(Pause);
+        PauseCommand = ReactiveCommand.Create(Pause);
     }
 
 #region Fields
 
     private readonly Storage _storage;
     private IPlaybackAudio _playbackAudio;
-    private YTrack _actualTrack = new YTrack();
+    private YTrack _actualTrack = new();
 
 #endregion
 
@@ -35,7 +34,7 @@ public class MusicPlayer : IMusicPlayer
 
     public PlaybackState State { get; private set; }
     public SourceList<YTrack> Tracks { get; } = new();
-    
+
     public YTrack? SelectedTrack { get; private set; }
 
 #endregion
@@ -43,16 +42,16 @@ public class MusicPlayer : IMusicPlayer
 #region Commands
 
     /// <summary>
-    ///     Selects audio to play by its index
+    ///     Command to select track to play by its index
     ///     CanExecute is false when the last audio in the list is playing
     /// </summary>
     public ReactiveCommand<int, Unit> SelectCommand { get; }
-    
+
     /// <summary>
-    ///     Command to Play the selected track
-    ///     CanExecute equals false, when the current audio is already playing
+    ///     Command to load the selected track
+    ///     (if it hasn't been loaded before) and plays it.
     /// </summary>
-    public ReactiveCommand<Unit, Unit> PlayCommand { get; }
+    public ReactiveCommand<Unit, Unit> PlayAsyncCommand { get; }
 
     /// <summary>
     ///     Command to Pause the selected track
@@ -76,10 +75,10 @@ public class MusicPlayer : IMusicPlayer
 
 #region Methods
 
-    private async Task Play()
+    private async Task LoadAndPlayAsync()
     {
         if (SelectedTrack == null) throw new InvalidOperationException();
-        
+
         if (_actualTrack.Equals(SelectedTrack))
         {
             _playbackAudio.Play();
@@ -98,19 +97,14 @@ public class MusicPlayer : IMusicPlayer
         }
     }
 
-    // без понятия почему команда не выполняется если метод
-    // void, если метод aсинхронный возращает Task все норм
-    // ( тоесть если ReactiveCommand.Create(Pause); вместо ReactiveCommand.CreateFromTask(Pause); )
-    private async Task Pause()
+    private void Pause()
     {
         if (SelectedTrack == null) throw new InvalidOperationException();
-        
         _playbackAudio.Pause();
         State = _playbackAudio.State;
     }
-    
-    // тоже самое
-    private async Task Select(int index)
+
+    private void Select(int index)
     {
         SelectedTrack = Tracks.Items.ElementAt(index);
     }
@@ -137,5 +131,4 @@ public class MusicPlayer : IMusicPlayer
     }
 
 #endregion
-    
 }

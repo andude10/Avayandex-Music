@@ -1,4 +1,3 @@
-using Avayandex_Music.Core.Storages;
 using LibVLCSharp.Shared;
 
 namespace Avayandex_Music.Core.Playbacks.Audio;
@@ -41,5 +40,4 @@ public class VlcPlaybackAudio : IPlaybackAudio
     }
 
 #endregion
-    
 }

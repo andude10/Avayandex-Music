@@ -1,4 +1,3 @@
-using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using Avayandex_Music.Core.Services;
@@ -17,13 +16,13 @@ public class FileStorage : Storage
     {
         var api = new YandexMusicApi();
         var authStorage = AuthStorageService.GetInstance();
-        
+
         // get download link
         var metaData = (await api.Track.GetMetadataForDownloadAsync(authStorage, track))
             .Result.First();
         var downloadInfo = await api.Track.GetDownloadFileInfoAsync(authStorage, metaData);
         var url = BuildLinkForDownload(metaData, downloadInfo);
-        
+
         // download track from link
         var path = Path.Combine(StorageDirectory, track.Id + FileFormat);
         await HttpDownloadFileAsync(new HttpClient(), url, path);
@@ -40,16 +39,17 @@ public class FileStorage : Storage
 
         return filesInDir.Select(foundFile => foundFile.FullName).FirstOrDefault();
     }
-    
-    private static async Task HttpDownloadFileAsync(HttpClient httpClient, string url, string path) 
+
+    private static async Task HttpDownloadFileAsync(HttpClient httpClient, string url, string path)
     {
         using var response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
         await using var streamToReadFrom = await response.Content.ReadAsStreamAsync();
-        await using var streamToWriteTo = File.Open(path, FileMode.Create); 
+        await using var streamToWriteTo = File.Open(path, FileMode.Create);
         await streamToReadFrom.CopyToAsync(streamToWriteTo);
     }
 
-    private static string BuildLinkForDownload(YTrackDownloadInfo mainDownloadResponse, YStorageDownloadFile storageDownload)
+    private static string BuildLinkForDownload(YTrackDownloadInfo mainDownloadResponse,
+        YStorageDownloadFile storageDownload)
     {
         var path = storageDownload.Path;
         var host = storageDownload.Host;

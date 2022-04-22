@@ -6,7 +6,7 @@ using Avayandex_Music.Presentation.Utilities.Interactions;
 using ReactiveUI;
 using Splat;
 
-namespace Avayandex_Music.Presentation.ViewModels;
+namespace Avayandex_Music.Presentation.ViewModels.Views;
 
 public class LoginViewModel : ViewModelBase
 {

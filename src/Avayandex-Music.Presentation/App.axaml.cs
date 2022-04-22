@@ -5,7 +5,7 @@ using Avayandex_Music.Core.Playbacks.Audio;
 using Avayandex_Music.Core.Players.Audio.Music;
 using Avayandex_Music.Core.Services;
 using Avayandex_Music.Core.Storages;
-using Avayandex_Music.Presentation.ViewModels;
+using Avayandex_Music.Presentation.ViewModels.Views;
 using Avayandex_Music.Presentation.Views;
 using Splat;
 
@@ -24,6 +24,7 @@ public class App : Application
         Locator.CurrentMutable.Register(() => new FileStorage(), typeof(Storage));
         Locator.CurrentMutable.Register(() => new MusicPlayer(new FileStorage(), new VlcPlaybackAudio()),
             typeof(IMusicPlayer));
+
         base.RegisterServices();
     }
 

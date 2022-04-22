@@ -1,4 +1,3 @@
-using System.Reactive;
 using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -6,7 +5,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Avayandex_Music.Presentation.Utilities.Interactions;
-using Avayandex_Music.Presentation.ViewModels;
+using Avayandex_Music.Presentation.ViewModels.Views;
 using ReactiveUI;
 
 namespace Avayandex_Music.Presentation.Views;
@@ -42,10 +41,6 @@ public partial class LoginWindow : ReactiveWindow<LoginViewModel>
 
         this.WhenActivated(d =>
         {
-            d(this.Events().Activated
-                .Select(args => Unit.Default)
-                .InvokeCommand(this, view => view.ViewModel!.TryAutoLoginCommand));
-
             d(this.Bind(ViewModel, vm => vm.Login,
                 view => view.FindLoginTextBox.Text));
             d(this.Bind(ViewModel, vm => vm.Password,

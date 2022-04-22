@@ -4,8 +4,8 @@ namespace Avayandex_Music.Core.Services;
 
 public static class AuthStorageService
 {
-    private static readonly AuthStorage AuthStorage = new AuthStorage();
-    private static readonly object AuthStorageLocker = new object();
+    private static readonly AuthStorage AuthStorage = new();
+    private static readonly object AuthStorageLocker = new();
 
     public static AuthStorage GetInstance()
     {
