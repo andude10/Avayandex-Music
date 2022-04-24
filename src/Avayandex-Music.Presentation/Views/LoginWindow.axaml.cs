@@ -1,3 +1,5 @@
+using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -6,6 +8,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Avayandex_Music.Presentation.Utilities.Interactions;
 using Avayandex_Music.Presentation.ViewModels.Views;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
 namespace Avayandex_Music.Presentation.Views;
@@ -27,17 +30,27 @@ public partial class LoginWindow : ReactiveWindow<LoginViewModel>
             desktop.MainWindow.Show();
         });
 
-        LoginInteractions.HideLoadScreen.RegisterHandler(async _ =>
-        {
-            await Observable.Range(0, 1).ObserveOn(RxApp.MainThreadScheduler);
-            Show();
-        });
+        this.Events().Opened
+            .SelectMany(async args =>
+            {
+                if (ViewModel == null) return Unit.Default;
 
-        LoginInteractions.ShowLoadScreen.RegisterHandler(async _ =>
-        {
-            await Observable.Range(0, 1).ObserveOn(RxApp.MainThreadScheduler);
-            Hide();
-        });
+                var isSuccessful = await ViewModel!.TryAutoLoginCommand.Execute();
+                if (!isSuccessful) return Unit.Default;
+
+                if (Application.Current?.ApplicationLifetime is not
+                    IClassicDesktopStyleApplicationLifetime desktop) return Unit.Default;
+
+                Hide();
+                desktop.MainWindow = new MainWindow
+                {
+                    DataContext = new MainWindowViewModel()
+                };
+                desktop.MainWindow.Show();
+
+                return Unit.Default;
+            })
+            .Subscribe();
 
         this.WhenActivated(d =>
         {

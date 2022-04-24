@@ -42,7 +42,7 @@ public class LoginViewModel : ViewModelBase
 #region Commands
 
     public ReactiveCommand<Unit, Unit> TryLoginCommand { get; }
-    public ReactiveCommand<Unit, Unit> TryAutoLoginCommand { get; }
+    public ReactiveCommand<Unit, bool> TryAutoLoginCommand { get; }
 
 #endregion
 
@@ -55,22 +55,17 @@ public class LoginViewModel : ViewModelBase
 
         var isSuccessful = await loginService.AuthorizeAsync(Login, Password);
 
-        if (isSuccessful) LoginInteractions.ShowMainWindow.Handle(Unit.Default);
+        if (isSuccessful) LoginInteractions.ShowMainWindow.Handle(Unit.Default).Subscribe();
     }
 
-    private async Task TryAutoLogin()
+    private async Task<bool> TryAutoLogin()
     {
-        LoginInteractions.ShowLoadScreen.Handle(Unit.Default).Subscribe();
-
         var loginService = Locator.Current.GetService<ILoginService>()
                            ?? throw new InvalidOperationException();
 
         var isSuccessful = await loginService.AuthorizeAsync();
 
-        if (isSuccessful)
-            LoginInteractions.ShowMainWindow.Handle(Unit.Default).Subscribe();
-        else
-            LoginInteractions.HideLoadScreen.Handle(Unit.Default).Subscribe();
+        return isSuccessful;
     }
 
 #endregion

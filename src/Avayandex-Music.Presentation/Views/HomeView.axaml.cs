@@ -1,8 +1,11 @@
+using System.Reactive;
+using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using Avayandex_Music.Presentation.ViewModels.Views;
 using Avayandex_Music.Presentation.Views.Controls;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
 namespace Avayandex_Music.Presentation.Views;
@@ -11,6 +14,10 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
 {
     public HomeView()
     {
+        this.Events().AttachedToVisualTree
+            .Select(_ => Unit.Default)
+            .InvokeCommand(this, view => view.ViewModel!.LoadDataCommand);
+
         this.WhenActivated(d =>
         {
             d(this.BindCommand(ViewModel, vm => vm.FindTrackCommand,
