@@ -21,8 +21,8 @@ public class App : Application
     public override void RegisterServices()
     {
         Locator.CurrentMutable.Register(() => new LoginService(), typeof(ILoginService));
-        Locator.CurrentMutable.Register(() => new FileStorage(), typeof(Storage));
-        Locator.CurrentMutable.Register(() => new MusicPlayer(new FileStorage(), new VlcPlaybackAudio()),
+        Locator.CurrentMutable.Register(() => new LinuxStorage(), typeof(Storage));
+        Locator.CurrentMutable.Register(() => new MusicPlayer(new LinuxStorage(), new VlcPlaybackAudio()),
             typeof(IMusicPlayer));
 
         base.RegisterServices();

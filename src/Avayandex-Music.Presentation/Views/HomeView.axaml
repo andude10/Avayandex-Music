@@ -5,20 +5,24 @@
              xmlns:controls="clr-namespace:Avayandex_Music.Presentation.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Avayandex_Music.Presentation.Views.HomeView">
-    <StackPanel HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-        <controls:SmartPlaylists x:Name="SmartPlaylists" />
+    <Grid RowDefinitions="*,*">
+        <controls:SmartPlaylists x:Name="SmartPlaylists"
+                                 Margin="15" />
 
-        <TextBlock Text="Hi, I'm the first view!" />
-        <Button x:Name="FindTrackButton"
-                Content="Find track"
-                Margin="10" />
-        <Button x:Name="PlayTrackButton"
-                Content="Play music"
-                Margin="10" />
-        <Button x:Name="StopTrackButton"
-                Content="Pause music"
-                Margin="10" />
-        <TextBlock Text="{Binding UrlPathSegment}" />
-    </StackPanel>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <TextBlock Text="Hi, I'm the first view!" />
+            <Button x:Name="FindTrackButton"
+                    Content="Find track"
+                    Margin="10" />
+            <Button x:Name="PlayTrackButton"
+                    Content="Play music"
+                    Margin="10" />
+            <Button x:Name="StopTrackButton"
+                    Content="Pause music"
+                    Margin="10" />
+            <TextBlock Text="{Binding UrlPathSegment}" />
+        </StackPanel>
+    </Grid>
+
 </UserControl>

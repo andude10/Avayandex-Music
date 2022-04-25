@@ -2,17 +2,19 @@ using Yandex.Music.Api.Models.Track;
 
 namespace Avayandex_Music.Core.Storages;
 
+/// <summary>
+///     The Storage Object is responsible for loading, retrieving and clearing the cache.
+/// </summary>
+/*
+ * The user accesses the storage in order
+ * to get an external file (for example, a track)
+ * and if the file has not been loaded before, the storage loads it.
+ */
 public abstract class Storage
 {
     /// <summary>
     ///     Loads track into the storage and returns the full file name
     /// </summary>
     /// <returns></returns>
-    public abstract Task<string> LoadTrack(YTrack? track);
-
-    /// <summary>
-    ///     If the file with this id is in storage, returns its full file name
-    /// </summary>
-    /// <returns>Full file name, or null if the file is not in the storage</returns>
-    public abstract string? GetPath(string id);
+    public abstract Task<string> LoadTrackAsync(YTrack track);
 }

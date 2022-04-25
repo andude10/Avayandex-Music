@@ -2,35 +2,28 @@ using System.Security.Cryptography;
 using System.Text;
 using Avayandex_Music.Core.Services;
 using Yandex.Music.Api;
+using Yandex.Music.Api.Common;
 using Yandex.Music.Api.Models.Common;
 using Yandex.Music.Api.Models.Track;
 
 namespace Avayandex_Music.Core.Storages;
 
-public class FileStorage : Storage
+public class LinuxStorage : Storage
 {
     private const string StorageDirectory = "Cache";
-    private const string FileFormat = ".mp3";
+    private const string TrackFileFormat = ".mp3";
 
-    public override async Task<string> LoadTrack(YTrack? track)
+    public override async Task<string> LoadTrackAsync(YTrack track)
     {
         var api = new YandexMusicApi();
         var authStorage = AuthStorageService.GetInstance();
 
-        // get download link
-        var metaData = (await api.Track.GetMetadataForDownloadAsync(authStorage, track))
-            .Result.First();
-        var downloadInfo = await api.Track.GetDownloadFileInfoAsync(authStorage, metaData);
-        var url = BuildLinkForDownload(metaData, downloadInfo);
-
-        // download track from link
-        var path = Path.Combine(StorageDirectory, track.Id + FileFormat);
-        await HttpDownloadFileAsync(new HttpClient(), url, path);
+        var path = GetPath(track.Id) ?? await DownloadTrack(track, api, authStorage);
 
         return path;
     }
 
-    public override string? GetPath(string id)
+    private static string? GetPath(string id)
     {
         if (!Directory.Exists(StorageDirectory)) Directory.CreateDirectory(StorageDirectory);
 
@@ -39,6 +32,23 @@ public class FileStorage : Storage
 
         return filesInDir.Select(foundFile => foundFile.FullName).FirstOrDefault();
     }
+
+    private static async Task<string> DownloadTrack(YTrack track, YandexMusicApi api, AuthStorage authStorage)
+    {
+        // get download link
+        var metaData = (await api.Track.GetMetadataForDownloadAsync(authStorage, track))
+            .Result.First();
+        var downloadInfo = await api.Track.GetDownloadFileInfoAsync(authStorage, metaData);
+        var url = BuildLinkForDownload(metaData, downloadInfo);
+
+        // download track from link
+        var path = Path.Combine(StorageDirectory, track.Id + TrackFileFormat);
+        await HttpDownloadFileAsync(new HttpClient(), url, path);
+
+        return path;
+    }
+
+#region Helper static methods
 
     private static async Task HttpDownloadFileAsync(HttpClient httpClient, string url, string path)
     {
@@ -68,4 +78,6 @@ public class FileStorage : Storage
 
         return link;
     }
+
+#endregion
 }

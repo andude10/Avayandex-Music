@@ -88,7 +88,7 @@ public class MusicPlayer : IMusicPlayer
         {
             _actualTrack = SelectedTrack;
 
-            var filePath = _storage.GetPath(SelectedTrack.Id) ?? await _storage.LoadTrack(SelectedTrack);
+            var filePath = await _storage.LoadTrackAsync(SelectedTrack);
 
             _playbackAudio = new VlcPlaybackAudio();
             _playbackAudio.SetupAudio(filePath);

@@ -28,6 +28,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         FindTrackCommand = ReactiveCommand.CreateFromTask(FindTrack);
         PlayCommand = ReactiveCommand.CreateFromTask(PlayTrackAsync);
         StopCommand = ReactiveCommand.Create(StopTrack);
+        LoadDataCommand = ReactiveCommand.CreateFromTask(LoadDataAsync);
 
         _musicPlayer = Locator.Current.GetService<IMusicPlayer>()
                        ?? throw new InvalidOperationException();
@@ -75,7 +76,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     }
 
     // test method
-    public async Task PlayTrackAsync()
+    private async Task PlayTrackAsync()
     {
         _musicPlayer.SelectCommand.Execute(0).Subscribe();
         await _musicPlayer.PlayAsyncCommand.Execute();
@@ -84,13 +85,13 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     /// <summary>
     ///     Starts a background download of data
     /// </summary>
-    public async Task LoadDataAsync()
+    private async Task LoadDataAsync()
     {
         await SmartPlaylistsViewModel.LoadSmartPlaylistsCommand.Execute();
     }
 
     // test method
-    public void StopTrack()
+    private void StopTrack()
     {
         _musicPlayer.PauseCommand.Execute().Subscribe();
     }

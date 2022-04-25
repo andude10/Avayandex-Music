@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Avayandex_Music.Presentation.Views.Controls.SmartPlaylists">
-    <CardCollection x:Name="PlaylistsCardCollection">
-        <CardCollection.ItemTemplate>
-
-        </CardCollection.ItemTemplate>
-    </CardCollection>
+    <CardCollection x:Name="PlaylistsCardCollection"
+                    Columns="4"
+                    ShowHeader="False"
+                    TileMode="HorizontalDisposition"
+                    Height="400" />
 </UserControl>
