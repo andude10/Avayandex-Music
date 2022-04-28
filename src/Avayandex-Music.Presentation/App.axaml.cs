@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avayandex_Music.Core.Playbacks.Audio;
-using Avayandex_Music.Core.Players.Audio.Music;
+using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Core.Services;
 using Avayandex_Music.Core.Storages;
 using Avayandex_Music.Presentation.ViewModels.Views;
@@ -22,8 +22,8 @@ public class App : Application
     {
         Locator.CurrentMutable.Register(() => new LoginService(), typeof(ILoginService));
         Locator.CurrentMutable.Register(() => new LinuxStorage(), typeof(Storage));
-        Locator.CurrentMutable.Register(() => new MusicPlayer(new LinuxStorage(), new VlcPlaybackAudio()),
-            typeof(IMusicPlayer));
+        Locator.CurrentMutable.Register(() => new TrackPlayer(new LinuxStorage(), new VlcPlaybackAudio()),
+            typeof(ITrackPlayer));
 
         base.RegisterServices();
     }

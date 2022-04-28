@@ -2,7 +2,7 @@ using LibVLCSharp.Shared;
 
 namespace Avayandex_Music.Core.Playbacks.Audio;
 
-public class VlcPlaybackAudio : IPlaybackAudio
+public class VlcPlaybackAudio : PlaybackAudio
 {
     private readonly LibVLC _libVlc;
     private readonly MediaPlayer _mediaPlayer;
@@ -13,30 +13,38 @@ public class VlcPlaybackAudio : IPlaybackAudio
         _mediaPlayer = new MediaPlayer(_libVlc);
     }
 
-#region Properties
-
-    public PlaybackState State { get; private set; }
-
-#endregion
-
-#region IPlaybackAudio
-
-    public void SetupAudio(string filePath)
+    public VlcPlaybackAudio(string filePath) : base(filePath)
     {
+        _libVlc = new LibVLC();
+        _mediaPlayer = new MediaPlayer(_libVlc);
+
         using var media = new Media(_libVlc, filePath);
         _mediaPlayer.Media = media;
     }
 
-    public void Play()
+#region Properties
+
+    public override PlaybackState State { get; protected set; }
+
+#endregion
+
+#region PlaybackAudio
+
+    public override void Play()
     {
         State = PlaybackState.Playing;
         _mediaPlayer.Play();
     }
 
-    public void Pause()
+    public override void Pause()
     {
-        State = PlaybackState.Stopped;
+        State = PlaybackState.Paused;
         _mediaPlayer.Pause();
+    }
+
+    public override PlaybackAudio CreatePlayback(string filePath)
+    {
+        return new VlcPlaybackAudio(filePath);
     }
 
 #endregion

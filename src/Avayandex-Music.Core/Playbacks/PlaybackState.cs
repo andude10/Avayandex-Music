@@ -4,5 +4,6 @@ public enum PlaybackState
 {
     Nothing,
     Playing,
+    Paused,
     Stopped
 }

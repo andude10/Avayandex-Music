@@ -14,7 +14,7 @@ public interface IAudioPlayer
 
     /// <summary>
     ///     Command to load the selected audio
-    ///     (if it hasn't been loaded before) and plays it.
+    ///     (if it hasn't been loaded before) and play it.
     /// </summary>
     public ReactiveCommand<Unit, Unit> PlayAsyncCommand { get; }
 

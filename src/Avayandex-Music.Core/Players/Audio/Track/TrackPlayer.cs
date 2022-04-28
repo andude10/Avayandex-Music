@@ -1,4 +1,5 @@
 using System.Reactive;
+using System.Reactive.Linq;
 using Avayandex_Music.Core.Playbacks;
 using Avayandex_Music.Core.Playbacks.Audio;
 using Avayandex_Music.Core.Storages;
@@ -6,35 +7,57 @@ using DynamicData;
 using ReactiveUI;
 using Yandex.Music.Api.Models.Track;
 
-namespace Avayandex_Music.Core.Players.Audio.Music;
+namespace Avayandex_Music.Core.Players.Audio.Track;
 
-public class MusicPlayer : IMusicPlayer
+public class TrackPlayer : ITrackPlayer
 {
-    public MusicPlayer(Storage storage, IPlaybackAudio playbackAudio)
+    public TrackPlayer(Storage storage, PlaybackAudio playbackAudio)
     {
         _storage = storage;
         _playbackAudio = playbackAudio;
 
         PlayAsyncCommand = ReactiveCommand.CreateFromTask(LoadAndPlayAsync);
         SelectCommand = ReactiveCommand.Create<int>(Select);
-        SelectNextCommand = ReactiveCommand.Create(SelectNext);
-        SelectPreviousCommand = ReactiveCommand.Create(SelectPrevious);
+
+        SelectNextCommand = ReactiveCommand.Create(SelectNext,
+            this.WhenAnyValue(player => player.Tracks.Items)
+                .Select(x =>
+                {
+                    var yTracks = x.ToList();
+                    return yTracks.Any() && !yTracks.Last().Equals(SelectedTrack);
+                }));
+        SelectPreviousCommand = ReactiveCommand.Create(SelectPrevious,
+            this.WhenAnyValue(player => player.Tracks.Items)
+                .Select(x =>
+                {
+                    var yTracks = x.ToList();
+                    return yTracks.Any() && !yTracks.First().Equals(SelectedTrack);
+                }));
+
         PauseCommand = ReactiveCommand.Create(Pause);
     }
 
 #region Fields
 
     private readonly Storage _storage;
-    private IPlaybackAudio _playbackAudio;
+    private PlaybackAudio _playbackAudio;
     private YTrack _actualTrack = new();
 
 #endregion
 
 #region Properties
 
-    public PlaybackState State { get; private set; }
+    public PlaybackState State => _playbackAudio.State;
+
+    /// <summary>
+    ///     All tracks in the player
+    /// </summary>
     public SourceList<YTrack> Tracks { get; } = new();
 
+    /// <summary>
+    ///     The track selected in the player. (It plays, stops,
+    ///     etc.) To select a track, use the Select* methods
+    /// </summary>
     public YTrack? SelectedTrack { get; private set; }
 
 #endregion
@@ -77,12 +100,13 @@ public class MusicPlayer : IMusicPlayer
 
     private async Task LoadAndPlayAsync()
     {
-        if (SelectedTrack == null) throw new InvalidOperationException();
+        if (SelectedTrack == null)
+            throw new InvalidOperationException("SelectedTrack is null. Most likely, one of the Select*" +
+                                                " methods was not called to select a track to play.");
 
         if (_actualTrack.Equals(SelectedTrack))
         {
             _playbackAudio.Play();
-            State = _playbackAudio.State;
         }
         else
         {
@@ -90,10 +114,8 @@ public class MusicPlayer : IMusicPlayer
 
             var filePath = await _storage.LoadTrackAsync(SelectedTrack);
 
-            _playbackAudio = new VlcPlaybackAudio();
-            _playbackAudio.SetupAudio(filePath);
+            _playbackAudio = _playbackAudio.CreatePlayback(filePath);
             _playbackAudio.Play();
-            State = _playbackAudio.State;
         }
     }
 
@@ -101,7 +123,6 @@ public class MusicPlayer : IMusicPlayer
     {
         if (SelectedTrack == null) throw new InvalidOperationException();
         _playbackAudio.Pause();
-        State = _playbackAudio.State;
     }
 
     private void Select(int index)

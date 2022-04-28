@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Avayandex_Music.Core.Players.Audio.Music;
+using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Core.Services;
 using Avayandex_Music.Presentation.ViewModels.Views.Controls;
 using DynamicData;
@@ -17,7 +17,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
 {
 #region Fields
 
-    private readonly IMusicPlayer _musicPlayer;
+    private readonly ITrackPlayer _trackPlayer;
 
 #endregion
 
@@ -30,7 +30,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         StopCommand = ReactiveCommand.Create(StopTrack);
         LoadDataCommand = ReactiveCommand.CreateFromTask(LoadDataAsync);
 
-        _musicPlayer = Locator.Current.GetService<IMusicPlayer>()
+        _trackPlayer = Locator.Current.GetService<ITrackPlayer>()
                        ?? throw new InvalidOperationException();
         SmartPlaylistsViewModel = new SmartPlaylistsViewModel();
     }
@@ -72,14 +72,14 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         var api = new YandexMusicApi();
         var getTrackId = (await api.Library.GetLikedTracksAsync(authStorage)).Result.Library.Tracks.First().Id;
         var track = (await api.Track.GetAsync(authStorage, getTrackId)).Result.First();
-        _musicPlayer.Tracks.Add(track);
+        _trackPlayer.Tracks.Add(track);
     }
 
     // test method
     private async Task PlayTrackAsync()
     {
-        _musicPlayer.SelectCommand.Execute(0).Subscribe();
-        await _musicPlayer.PlayAsyncCommand.Execute();
+        _trackPlayer.SelectCommand.Execute(0).Subscribe();
+        await _trackPlayer.PlayAsyncCommand.Execute();
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     // test method
     private void StopTrack()
     {
-        _musicPlayer.PauseCommand.Execute().Subscribe();
+        _trackPlayer.PauseCommand.Execute().Subscribe();
     }
 
 #endregion
