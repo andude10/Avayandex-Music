@@ -7,6 +7,7 @@ using Avayandex_Music.Core.Services;
 using Avayandex_Music.Core.Storages;
 using Avayandex_Music.Presentation.ViewModels.Views;
 using Avayandex_Music.Presentation.Views;
+using ReactiveUI;
 using Splat;
 
 namespace Avayandex_Music.Presentation;
@@ -20,6 +21,11 @@ public class App : Application
 
     public override void RegisterServices()
     {
+        // register views
+        Locator.CurrentMutable.Register(() => new HomeView(), typeof(IViewFor<HomeViewModel>));
+        Locator.CurrentMutable.Register(() => new PlaylistView(), typeof(IViewFor<PlaylistViewModel>));
+
+        // register services
         Locator.CurrentMutable.Register(() => new LoginService(), typeof(ILoginService));
         Locator.CurrentMutable.Register(() => new LinuxStorage(), typeof(Storage));
         Locator.CurrentMutable.Register(() => new TrackPlayer(new LinuxStorage(), new VlcPlaybackAudio()),

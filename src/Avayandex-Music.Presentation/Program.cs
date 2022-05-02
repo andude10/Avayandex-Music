@@ -1,10 +1,6 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.ReactiveUI;
-using Avayandex_Music.Presentation.ViewModels.Views;
-using Avayandex_Music.Presentation.Views;
-using ReactiveUI;
-using Splat;
 
 namespace Avayandex_Music.Presentation;
 
@@ -20,11 +16,8 @@ internal class Program
             .StartWithClassicDesktopLifetime(args);
     }
 
-    // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
     {
-        Locator.CurrentMutable.Register(() => new HomeView(), typeof(IViewFor<HomeViewModel>));
-
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()

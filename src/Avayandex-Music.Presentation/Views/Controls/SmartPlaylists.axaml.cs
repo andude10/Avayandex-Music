@@ -13,7 +13,7 @@ public partial class SmartPlaylists : ReactiveUserControl<SmartPlaylistsViewMode
     {
         this.WhenActivated(d =>
         {
-            d(this.OneWayBind(ViewModel, vm => vm.PlaylistsCard,
+            d(this.OneWayBind(ViewModel, vm => vm.PlaylistsCollection,
                 view => view.FindPlaylistsCardCollection.Items));
         });
         AvaloniaXamlLoader.Load(this);

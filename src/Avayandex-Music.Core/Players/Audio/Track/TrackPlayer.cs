@@ -52,7 +52,7 @@ public class TrackPlayer : ITrackPlayer
     /// <summary>
     ///     All tracks in the player
     /// </summary>
-    public SourceList<YTrack> Tracks { get; } = new();
+    public SourceList<YTrack> Tracks { get; set; } = new();
 
     /// <summary>
     ///     The track selected in the player. (It plays, stops,

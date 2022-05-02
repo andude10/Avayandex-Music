@@ -32,7 +32,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
 
         _trackPlayer = Locator.Current.GetService<ITrackPlayer>()
                        ?? throw new InvalidOperationException();
-        SmartPlaylistsViewModel = new SmartPlaylistsViewModel();
+        SmartPlaylistsViewModel = new SmartPlaylistsViewModel(HostScreen);
     }
 
 #region Properties
