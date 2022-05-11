@@ -7,10 +7,16 @@ using ReactiveUI;
 using Splat;
 using Yandex.Music.Api.Models.Track;
 
-namespace Avayandex_Music.Presentation.ViewModels.Views;
+namespace Avayandex_Music.Presentation.ViewModels;
 
 public class PlaylistViewModel : ViewModelBase, IRoutableViewModel
 {
+#region Fields
+
+    private readonly ReadOnlyObservableCollection<YTrack> _tracksCollection;
+
+#endregion
+
     public PlaylistViewModel(IScreen screen)
     {
         HostScreen = screen;
@@ -21,12 +27,6 @@ public class PlaylistViewModel : ViewModelBase, IRoutableViewModel
             .Bind(out _tracksCollection)
             .Subscribe();
     }
-
-#region Fields
-
-    private readonly ReadOnlyObservableCollection<YTrack> _tracksCollection;
-
-#endregion
 
 #region Properties
 

@@ -10,7 +10,7 @@ using ReactiveUI;
 using Yandex.Music.Api;
 using Yandex.Music.Api.Models.Playlist;
 
-namespace Avayandex_Music.Presentation.ViewModels.Views.Controls;
+namespace Avayandex_Music.Presentation.ViewModels.Controls;
 
 public class SmartPlaylistsViewModel : ViewModelBase, IRoutableViewModel
 {

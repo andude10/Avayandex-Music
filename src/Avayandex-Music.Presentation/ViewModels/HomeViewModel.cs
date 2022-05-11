@@ -5,13 +5,13 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Core.Services;
-using Avayandex_Music.Presentation.ViewModels.Views.Controls;
+using Avayandex_Music.Presentation.ViewModels.Controls;
 using DynamicData;
 using ReactiveUI;
 using Splat;
 using Yandex.Music.Api;
 
-namespace Avayandex_Music.Presentation.ViewModels.Views;
+namespace Avayandex_Music.Presentation.ViewModels;
 
 public class HomeViewModel : ViewModelBase, IRoutableViewModel
 {

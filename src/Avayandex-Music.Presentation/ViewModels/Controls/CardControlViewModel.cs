@@ -2,7 +2,7 @@ using System.Windows.Input;
 using Aura.UI.Data;
 using ReactiveUI;
 
-namespace Avayandex_Music.Presentation.ViewModels.Views.Controls;
+namespace Avayandex_Music.Presentation.ViewModels.Controls;
 
 public class CardControlViewModel : ViewModelBase, ICardControlTemplate
 {

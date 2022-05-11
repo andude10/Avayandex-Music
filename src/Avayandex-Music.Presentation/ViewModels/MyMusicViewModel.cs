@@ -1,7 +1,7 @@
 using System;
 using ReactiveUI;
 
-namespace Avayandex_Music.Presentation.ViewModels.Views;
+namespace Avayandex_Music.Presentation.ViewModels;
 
 public class MyMusicViewModel : ViewModelBase, IRoutableViewModel
 {

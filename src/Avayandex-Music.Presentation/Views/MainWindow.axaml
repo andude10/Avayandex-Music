@@ -3,14 +3,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:rxui="clr-namespace:Avalonia.ReactiveUI;assembly=Avalonia.ReactiveUI"
-        xmlns:views="clr-namespace:Avayandex_Music.Presentation.ViewModels.Views"
+        xmlns:viewModels="clr-namespace:Avayandex_Music.Presentation.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Avayandex_Music.Presentation.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Avayandex_Music">
 
     <Design.DataContext>
-        <views:MainWindowViewModel />
+        <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
     <Grid ColumnDefinitions="Auto, *">
