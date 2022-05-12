@@ -14,6 +14,9 @@ public partial class PlaylistView : ReactiveUserControl<PlaylistViewModel>
         {
             d(this.OneWayBind(ViewModel, vm => vm.TracksCollection,
                 view => view.FindTracksListBox.Items));
+
+            d(this.BindCommand(ViewModel, vm => vm.StartPlayCommand,
+                view => view.FindStartPlayButton));
         });
         AvaloniaXamlLoader.Load(this);
     }
@@ -22,6 +25,9 @@ public partial class PlaylistView : ReactiveUserControl<PlaylistViewModel>
 
     public ListBox FindTracksListBox =>
         this.FindControl<ListBox>("TracksListBox");
+
+    public Button FindStartPlayButton =>
+        this.FindControl<Button>("StartPlayButton");
 
 #endregion
 }

@@ -1,5 +1,9 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
+using Avayandex_Music.Core.Players.Audio.Track;
+using Avayandex_Music.Presentation.ViewModels.Controls;
 using ReactiveUI;
+using Splat;
 
 namespace Avayandex_Music.Presentation.ViewModels;
 
@@ -13,7 +17,17 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         NavigateToMyMusicCommand = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new MyMusicViewModel(this))
         );
+
+        var trackPlayer = Locator.Current.GetService<ITrackPlayer>()
+                          ?? throw new InvalidOperationException();
+        PlayerDockViewModel.Create(trackPlayer);
     }
+
+#region Properties
+
+    public PlayerDockViewModel PlayerDockViewModel => PlayerDockViewModel.Instance;
+
+#endregion
 
 #region Navigation
 

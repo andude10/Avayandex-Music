@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:track="clr-namespace:Yandex.Music.Api.Models.Track;assembly=Yandex.Music.Api"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="100"
+             x:Class="Avayandex_Music.Presentation.Views.Controls.PlayerDockView">
+    <Grid>
+        <StackPanel Orientation="Horizontal" Margin="15">
+            <TextBlock Margin="5" VerticalAlignment="Center">Track playing:</TextBlock>
+            <Label x:Name="CurrantTrackLabel"
+                   Margin="5" VerticalAlignment="Center">
+                <Label.DataTemplates>
+                    <DataTemplate DataType="track:YTrack">
+                        <TextBlock Text="{Binding Title}" />
+                    </DataTemplate>
+                </Label.DataTemplates>
+            </Label>
+
+            <Button x:Name="NextButton"
+                    Margin="35,5,5,5" Width="75" Height="35"
+                    VerticalAlignment="Center">
+                <TextBlock FontWeight="Bold"> Next</TextBlock>
+            </Button>
+            <Button x:Name="PreviousButton"
+                    Margin="5,5,5,5" Width="75" Height="35"
+                    VerticalAlignment="Center">
+                <TextBlock FontWeight="Bold"> Previous</TextBlock>
+            </Button>
+
+            <Button x:Name="PlayButton"
+                    Margin="35,5,5,5" Width="45" Height="35"
+                    VerticalAlignment="Center">
+                <TextBlock FontWeight="Bold"> Play</TextBlock>
+            </Button>
+            <Button x:Name="PauseButton"
+                    Margin="5,5,5,5" Width="45" Height="35"
+                    VerticalAlignment="Center">
+                <TextBlock FontWeight="Bold"> Stop</TextBlock>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

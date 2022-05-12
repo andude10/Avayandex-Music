@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:rxui="clr-namespace:Avalonia.ReactiveUI;assembly=Avalonia.ReactiveUI"
         xmlns:viewModels="clr-namespace:Avayandex_Music.Presentation.ViewModels"
+        xmlns:controls="clr-namespace:Avayandex_Music.Presentation.Views.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Avayandex_Music.Presentation.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -41,12 +42,18 @@
             </StackPanel>
         </Border>
 
-        <rxui:RoutedViewHost Grid.Column="1" Router="{Binding Router}">
-            <rxui:RoutedViewHost.DefaultContent>
-                <TextBlock Text="Default content"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center" />
-            </rxui:RoutedViewHost.DefaultContent>
-        </rxui:RoutedViewHost>
+        <Grid Grid.Column="1" RowDefinitions="*, Auto">
+
+            <rxui:RoutedViewHost Router="{Binding Router}">
+                <rxui:RoutedViewHost.DefaultContent>
+                    <TextBlock Text="Default content"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </rxui:RoutedViewHost.DefaultContent>
+            </rxui:RoutedViewHost>
+
+            <controls:PlayerDockView Grid.Row="1" x:Name="PlayerDockView" />
+        </Grid>
+
     </Grid>
 </Window>

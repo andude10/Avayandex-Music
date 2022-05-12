@@ -57,7 +57,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     public ReactiveCommand<Unit, Unit> StopCommand { get; }
 
     /// <summary>
-    ///     Commands to start a background download of data
+    ///     Command to start a background download of data
     /// </summary>
     public ReactiveCommand<Unit, Unit> LoadDataCommand { get; }
 

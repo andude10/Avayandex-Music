@@ -1,7 +1,9 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
 using Avayandex_Music.Core.Players.Audio.Track;
+using Avayandex_Music.Presentation.ViewModels.Controls;
 using DynamicData;
 using ReactiveUI;
 using Splat;
@@ -26,7 +28,25 @@ public class PlaylistViewModel : ViewModelBase, IRoutableViewModel
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _tracksCollection)
             .Subscribe();
+
+        StartPlayCommand = ReactiveCommand.Create(StartPlay);
     }
+
+#region Commands
+
+    public ReactiveCommand<Unit, Unit> StartPlayCommand { get; }
+
+#endregion
+
+#region Methods
+
+    private void StartPlay()
+    {
+        PlayerDockViewModel.SetPlayer(TrackPlayer);
+        PlayerDockViewModel.Instance.TrackPlayer.SelectCommand.Execute(0).Subscribe();
+    }
+
+#endregion
 
 #region Properties
 
