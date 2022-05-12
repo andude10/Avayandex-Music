@@ -20,13 +20,11 @@ public interface IAudioPlayer
 
     /// <summary>
     ///     Command to select next audio to play
-    ///     CanExecute equals false, when the last audio in the list is playing
     /// </summary>
     public ReactiveCommand<Unit, Unit> SelectNextCommand { get; }
 
     /// <summary>
     ///     Command to select previous audio to play
-    ///     CanExecute is false when the last audio in the list is playing
     /// </summary>
     public ReactiveCommand<Unit, Unit> SelectPreviousCommand { get; }
 

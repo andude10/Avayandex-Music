@@ -10,7 +10,7 @@ public interface ITrackPlayer : IAudioPlayer, IDisposable
     /// <summary>
     ///     All tracks in the player
     /// </summary>
-    public SourceList<YTrack> Tracks { get; set; }
+    public SourceList<YTrack> Tracks { get; }
 
     /// <summary>
     ///     The track selected in the player. (It plays, stops,

@@ -9,38 +9,38 @@ using Yandex.Music.Api.Models.Track;
 
 namespace Avayandex_Music.Core.Players.Audio.Track;
 
-public class TrackPlayer : ITrackPlayer
+public class TrackPlayer : ReactiveObject, ITrackPlayer
 {
     public TrackPlayer(Storage storage, PlaybackAudio playbackAudio)
     {
         _storage = storage;
         _playbackAudio = playbackAudio;
 
-        PlayAsyncCommand = ReactiveCommand.CreateFromTask(LoadAndPlayAsync);
+        var isSelectedTrackNotNull = this.WhenAnyValue(player => player.SelectedTrack)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Select(x => x != null);
+
+        PlayAsyncCommand = ReactiveCommand.CreateFromTask(LoadAndPlayAsync, isSelectedTrackNotNull);
+        PauseCommand = ReactiveCommand.Create(Pause, isSelectedTrackNotNull);
+        StopCommand = ReactiveCommand.Create(Stop, isSelectedTrackNotNull);
+
         SelectCommand = ReactiveCommand.Create<int>(Select);
 
         SelectNextCommand = ReactiveCommand.Create(SelectNext,
-            this.WhenAnyValue(player => player.Tracks)
-                .Select(x =>
-                {
-                    var yTracks = x.Items.ToList();
-                    return yTracks.Any() && !yTracks.Last().Equals(SelectedTrack);
-                }));
+            Tracks.Connect()
+                .ToCollection()
+                .Select(items => items.Any() && !items.Last().Equals(SelectedTrack)));
         SelectPreviousCommand = ReactiveCommand.Create(SelectPrevious,
-            this.WhenAnyValue(player => player.Tracks)
-                .Select(x =>
-                {
-                    var yTracks = x.Items.ToList();
-                    return yTracks.Any() && !yTracks.First().Equals(SelectedTrack);
-                }));
-
-        PauseCommand = ReactiveCommand.Create(Pause);
+            Tracks.Connect()
+                .ToCollection()
+                .Select(items => items.Any() && !items.Last().Equals(SelectedTrack)));
     }
 
 #region Fields
 
     private readonly Storage _storage;
     private PlaybackAudio _playbackAudio;
+    private YTrack? _selectedTrack;
     private YTrack _actualTrack = new();
 
 #endregion
@@ -52,13 +52,17 @@ public class TrackPlayer : ITrackPlayer
     /// <summary>
     ///     All tracks in the player
     /// </summary>
-    public SourceList<YTrack> Tracks { get; set; } = new();
+    public SourceList<YTrack> Tracks { get; } = new();
 
     /// <summary>
     ///     The track selected in the player. (It plays, stops,
     ///     etc.) To select a track, use the Select* methods
     /// </summary>
-    public YTrack? SelectedTrack { get; private set; }
+    public YTrack? SelectedTrack
+    {
+        get => _selectedTrack;
+        private set => this.RaiseAndSetIfChanged(ref _selectedTrack, value);
+    }
 
 #endregion
 
@@ -149,6 +153,8 @@ public class TrackPlayer : ITrackPlayer
             .DefaultIfEmpty(Tracks.Items.First())
             .FirstOrDefault();
 
+        if (SelectedTrack != null) StopCommand.Execute().Subscribe();
+
         SelectedTrack = nextTrack ?? throw new NullReferenceException();
     }
 
@@ -159,6 +165,8 @@ public class TrackPlayer : ITrackPlayer
                 .Skip(1)
                 .First())
             .LastOrDefault();
+
+        if (SelectedTrack != null) StopCommand.Execute().Subscribe();
 
         SelectedTrack = previousTrack ?? throw new NullReferenceException();
     }
