@@ -42,9 +42,44 @@ public class VlcPlaybackAudio : PlaybackAudio
         _mediaPlayer.Pause();
     }
 
+    public override void Stop()
+    {
+        State = PlaybackState.Stopped;
+        _mediaPlayer.Stop();
+    }
+
     public override PlaybackAudio CreatePlayback(string filePath)
     {
         return new VlcPlaybackAudio(filePath);
+    }
+
+#endregion
+
+#region IDisposable
+
+    private bool _disposed;
+
+    public override void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed) return;
+        if (disposing)
+        {
+            _mediaPlayer.Dispose();
+            _libVlc.Dispose();
+        }
+
+        _disposed = true;
+    }
+
+    ~VlcPlaybackAudio()
+    {
+        Dispose(false);
     }
 
 #endregion

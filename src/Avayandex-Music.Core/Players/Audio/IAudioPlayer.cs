@@ -36,6 +36,12 @@ public interface IAudioPlayer
     /// </summary>
     public ReactiveCommand<Unit, Unit> PauseCommand { get; }
 
+    /// <summary>
+    ///     Command to stop playing the audio.
+    ///     CanExecute is false when the audio is already stopped.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> StopCommand { get; }
+
 #region Properties
 
     public PlaybackState State { get; }

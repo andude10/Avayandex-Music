@@ -4,7 +4,7 @@ namespace Avayandex_Music.Core.Playbacks.Audio;
 ///     The PlaybackAudio object is responsible for
 ///     interacting with a single audio file (Play, Stop, State ).
 /// </summary>
-public abstract class PlaybackAudio
+public abstract class PlaybackAudio : IDisposable
 {
     public PlaybackAudio()
     {
@@ -19,8 +19,15 @@ public abstract class PlaybackAudio
     /// </summary>
     public abstract PlaybackState State { get; protected set; }
 
+#region IDisposable
+
+    public abstract void Dispose();
+
+#endregion
+
     public abstract void Play();
     public abstract void Pause();
+    public abstract void Stop();
 
     /// <summary>
     ///     Creates an instance of the current player

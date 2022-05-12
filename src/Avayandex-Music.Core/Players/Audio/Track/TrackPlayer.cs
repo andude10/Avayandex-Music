@@ -20,17 +20,17 @@ public class TrackPlayer : ITrackPlayer
         SelectCommand = ReactiveCommand.Create<int>(Select);
 
         SelectNextCommand = ReactiveCommand.Create(SelectNext,
-            this.WhenAnyValue(player => player.Tracks.Items)
+            this.WhenAnyValue(player => player.Tracks)
                 .Select(x =>
                 {
-                    var yTracks = x.ToList();
+                    var yTracks = x.Items.ToList();
                     return yTracks.Any() && !yTracks.Last().Equals(SelectedTrack);
                 }));
         SelectPreviousCommand = ReactiveCommand.Create(SelectPrevious,
-            this.WhenAnyValue(player => player.Tracks.Items)
+            this.WhenAnyValue(player => player.Tracks)
                 .Select(x =>
                 {
-                    var yTracks = x.ToList();
+                    var yTracks = x.Items.ToList();
                     return yTracks.Any() && !yTracks.First().Equals(SelectedTrack);
                 }));
 
@@ -83,6 +83,12 @@ public class TrackPlayer : ITrackPlayer
     public ReactiveCommand<Unit, Unit> PauseCommand { get; }
 
     /// <summary>
+    ///     Command to stop the selected track
+    ///     CanExecute is false when the track is already stopped.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> StopCommand { get; }
+
+    /// <summary>
     ///     Command to play the next or first track in the list.
     ///     CanExecute equals false, when the last track in the list is playing
     /// </summary>
@@ -125,6 +131,12 @@ public class TrackPlayer : ITrackPlayer
         _playbackAudio.Pause();
     }
 
+    private void Stop()
+    {
+        if (SelectedTrack == null) throw new InvalidOperationException();
+        _playbackAudio.Stop();
+    }
+
     private void Select(int index)
     {
         SelectedTrack = Tracks.Items.ElementAt(index);
@@ -149,6 +161,31 @@ public class TrackPlayer : ITrackPlayer
             .LastOrDefault();
 
         SelectedTrack = previousTrack ?? throw new NullReferenceException();
+    }
+
+#endregion
+
+#region IDisposable
+
+    private bool _disposed;
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed) return;
+        if (disposing) _playbackAudio.Dispose();
+
+        _disposed = true;
+    }
+
+    ~TrackPlayer()
+    {
+        Dispose(false);
     }
 
 #endregion
