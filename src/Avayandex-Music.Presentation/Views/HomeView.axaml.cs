@@ -25,6 +25,8 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
 
             d(this.Bind(ViewModel, vm => vm.SmartPlaylistsViewModel,
                 view => view.FindSmartPlaylistsView.ViewModel));
+            d(this.Bind(ViewModel, vm => vm.PodcastEpisodesViewModel,
+                view => view.FindPodcastEpisodesView.ViewModel));
         });
 
         AvaloniaXamlLoader.Load(this);
@@ -36,6 +38,7 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
     public Button FindPlayTrackButton => this.FindControl<Button>("PlayTrackButton");
     public Button FindStopTrackButton => this.FindControl<Button>("StopTrackButton");
     public SmartPlaylistsView FindSmartPlaylistsView => this.FindControl<SmartPlaylistsView>("SmartPlaylistsView");
+    public PodcastEpisodesView FindPodcastEpisodesView => this.FindControl<PodcastEpisodesView>("PodcastEpisodesView");
 
 #endregion
 }

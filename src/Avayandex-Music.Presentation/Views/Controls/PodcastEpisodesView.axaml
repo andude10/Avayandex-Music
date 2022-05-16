@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:track="clr-namespace:Yandex.Music.Api.Models.Track;assembly=Yandex.Music.Api"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Avayandex_Music.Presentation.Views.Controls.PodcastEpisodesView">
+    
+    <StackPanel>
+        <TextBlock FontWeight="Bold"
+                   Margin="10" >Yandex music podcasts</TextBlock>
+        
+        <ListBox x:Name="EpisodesListBox">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="track:YTrack">
+                    <Label Content="{Binding Title}" Margin="15"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
+</UserControl>

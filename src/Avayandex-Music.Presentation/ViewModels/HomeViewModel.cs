@@ -28,11 +28,13 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         _trackPlayer = Locator.Current.GetService<ITrackPlayer>()
                        ?? throw new InvalidOperationException();
         SmartPlaylistsViewModel = new SmartPlaylistsViewModel(HostScreen);
+        PodcastEpisodesViewModel = new PodcastEpisodesViewModel(HostScreen);
     }
 
 #region Properties
 
     public SmartPlaylistsViewModel SmartPlaylistsViewModel { get; set; }
+    public PodcastEpisodesViewModel PodcastEpisodesViewModel { get; set; }
 
 #endregion
 
@@ -83,6 +85,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     private async Task LoadDataAsync()
     {
         await SmartPlaylistsViewModel.LoadSmartPlaylistsCommand.Execute();
+        await PodcastEpisodesViewModel.LoadPodcastsCommand.Execute();
     }
 
     // test method
