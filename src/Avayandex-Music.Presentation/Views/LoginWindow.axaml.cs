@@ -1,15 +1,10 @@
-using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
 using Avayandex_Music.Presentation.Utilities.Interactions;
-using Avayandex_Music.Presentation.ViewModels;
 using ReactiveMarbles.ObservableEvents;
-using ReactiveUI;
 
 namespace Avayandex_Music.Presentation.Views;
 

@@ -1,6 +1,5 @@
 using System.Windows.Input;
 using Aura.UI.Data;
-using ReactiveUI;
 
 namespace Avayandex_Music.Presentation.ViewModels.Controls;
 

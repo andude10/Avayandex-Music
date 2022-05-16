@@ -1,8 +1,5 @@
-﻿using System;
-using System.Reactive;
-using Avayandex_Music.Core.Players.Audio.Track;
+﻿using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Presentation.ViewModels.Controls;
-using ReactiveUI;
 using Splat;
 
 namespace Avayandex_Music.Presentation.ViewModels;

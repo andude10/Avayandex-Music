@@ -1,5 +1,4 @@
 using Avayandex_Music.Core.Security;
-using Xunit;
 
 namespace Avayandex_Music.Core.Tests.SecurityTests;
 

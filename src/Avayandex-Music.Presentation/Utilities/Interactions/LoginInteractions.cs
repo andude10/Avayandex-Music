@@ -1,6 +1,3 @@
-using System.Reactive;
-using ReactiveUI;
-
 namespace Avayandex_Music.Presentation.Utilities.Interactions;
 
 public static class LoginInteractions

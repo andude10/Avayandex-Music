@@ -14,4 +14,10 @@
         <PackageReference Include="ReactiveUI" Version="17.1.50"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Using Include="ReactiveUI"/>
+        <Using Include="System.Reactive"/>
+        <Using Include="Yandex.Music.Api"/>
+        <Using Include="Yandex.Music.Api.Models.Track"/>
+    </ItemGroup>
 </Project>

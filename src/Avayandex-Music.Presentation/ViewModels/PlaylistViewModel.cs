@@ -1,11 +1,8 @@
-using System;
 using System.Collections.ObjectModel;
-using System.Reactive;
 using System.Reactive.Linq;
 using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Presentation.ViewModels.Controls;
 using DynamicData;
-using ReactiveUI;
 using Splat;
 using Yandex.Music.Api.Models.Track;
 

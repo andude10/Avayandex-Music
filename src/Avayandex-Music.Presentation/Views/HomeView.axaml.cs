@@ -1,12 +1,8 @@
-using System.Reactive;
 using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
-using Avayandex_Music.Presentation.ViewModels;
 using Avayandex_Music.Presentation.Views.Controls;
 using ReactiveMarbles.ObservableEvents;
-using ReactiveUI;
 
 namespace Avayandex_Music.Presentation.Views;
 
@@ -28,7 +24,7 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
                 view => view.FindStopTrackButton));
 
             d(this.Bind(ViewModel, vm => vm.SmartPlaylistsViewModel,
-                view => view.FindSmartPlaylists.ViewModel));
+                view => view.FindSmartPlaylistsView.ViewModel));
         });
 
         AvaloniaXamlLoader.Load(this);
@@ -39,7 +35,7 @@ public partial class HomeView : ReactiveUserControl<HomeViewModel>
     public Button FindFindTrackButton => this.FindControl<Button>("FindTrackButton");
     public Button FindPlayTrackButton => this.FindControl<Button>("PlayTrackButton");
     public Button FindStopTrackButton => this.FindControl<Button>("StopTrackButton");
-    public SmartPlaylists FindSmartPlaylists => this.FindControl<SmartPlaylists>("SmartPlaylists");
+    public SmartPlaylistsView FindSmartPlaylistsView => this.FindControl<SmartPlaylistsView>("SmartPlaylistsView");
 
 #endregion
 }

@@ -1,12 +1,7 @@
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Avayandex_Music.Core.Services;
 using DynamicData;
-using ReactiveUI;
 using Yandex.Music.Api;
 using Yandex.Music.Api.Models.Playlist;
 

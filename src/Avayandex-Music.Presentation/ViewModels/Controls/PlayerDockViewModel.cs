@@ -1,6 +1,4 @@
-using System;
 using Avayandex_Music.Core.Players.Audio.Track;
-using ReactiveUI;
 using Splat;
 
 namespace Avayandex_Music.Presentation.ViewModels.Controls;
@@ -23,8 +21,8 @@ public class PlayerDockViewModel : ViewModelBase
     }
 
     public static PlayerDockViewModel Instance { get; private set; }
-        = new PlayerDockViewModel(Locator.Current.GetService<ITrackPlayer>()
-                                  ?? throw new InvalidOperationException());
+        = new(Locator.Current.GetService<ITrackPlayer>()
+              ?? throw new InvalidOperationException());
 
 #endregion
 

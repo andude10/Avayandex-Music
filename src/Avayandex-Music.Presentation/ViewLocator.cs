@@ -1,7 +1,5 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Avayandex_Music.Presentation.ViewModels;
 
 namespace Avayandex_Music.Presentation;
 

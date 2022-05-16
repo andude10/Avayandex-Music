@@ -25,4 +25,13 @@
         <ProjectReference Include="..\..\src\Avayandex-Music.Core\Avayandex-Music.Core.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Using Include="System"/>
+        <Using Include="System.Reactive"/>
+        <Using Include="System.Threading.Tasks"/>
+
+        <Using Include="ReactiveUI"/>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
 </Project>

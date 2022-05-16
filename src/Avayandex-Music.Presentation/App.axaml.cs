@@ -5,11 +5,7 @@ using Avayandex_Music.Core.Playbacks.Audio;
 using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Core.Services;
 using Avayandex_Music.Core.Storages;
-using Avayandex_Music.Presentation.ViewModels;
-using Avayandex_Music.Presentation.ViewModels.Controls;
 using Avayandex_Music.Presentation.Views;
-using Avayandex_Music.Presentation.Views.Controls;
-using ReactiveUI;
 using Splat;
 
 namespace Avayandex_Music.Presentation;

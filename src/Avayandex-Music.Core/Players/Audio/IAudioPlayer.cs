@@ -1,6 +1,4 @@
-using System.Reactive;
 using Avayandex_Music.Core.Playbacks;
-using ReactiveUI;
 
 namespace Avayandex_Music.Core.Players.Audio;
 
