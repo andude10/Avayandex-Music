@@ -1,40 +1,54 @@
-using System.Reactive.Linq;
-using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Core.Services;
 using Avayandex_Music.Presentation.ViewModels.Controls;
 using DynamicData;
-using Splat;
 using Yandex.Music.Api;
+using Yandex.Music.Api.Models.Playlist;
+using Yandex.Music.Api.Models.Track;
 
 namespace Avayandex_Music.Presentation.ViewModels;
 
 public class HomeViewModel : ViewModelBase, IRoutableViewModel
 {
-#region Fields
-
-    private readonly ITrackPlayer _trackPlayer;
-
-#endregion
-
     public HomeViewModel(IScreen screen)
     {
         HostScreen = screen;
-
-        FindTrackCommand = ReactiveCommand.CreateFromTask(FindTrack);
-        PlayCommand = ReactiveCommand.CreateFromTask(PlayTrackAsync);
-        StopCommand = ReactiveCommand.Create(StopTrack);
         LoadDataCommand = ReactiveCommand.CreateFromTask(LoadDataAsync);
 
-        _trackPlayer = Locator.Current.GetService<ITrackPlayer>()
-                       ?? throw new InvalidOperationException();
-        SmartPlaylistsViewModel = new SmartPlaylistsViewModel(HostScreen);
-        PodcastEpisodesViewModel = new PodcastEpisodesViewModel(HostScreen);
+        var playlistCardCommand = ReactiveCommand.Create<string>(playlistTitle =>
+        {
+            var playlist = SmartPlaylistsViewModel?.Source.Items.FirstOrDefault(p => p.Title == playlistTitle);
+
+            if (playlist == null) return;
+
+            var vm = new PlaylistViewModel(HostScreen);
+            for (var i = 0; i < playlist.Tracks.Count(); i++) vm.TrackPlayer.Tracks.Add(playlist.Tracks[i].Track);
+            HostScreen.Router.Navigate.Execute(vm);
+        });
+
+        SmartPlaylistsViewModel = new CardsViewModel<YPlaylist>(playlist => new CardControlViewModel
+        {
+            Header = playlist.Title,
+            SecondaryHeader = playlist.Description,
+            Command = playlistCardCommand,
+            CommandParameter = playlist.Title
+        });
+
+        RecommendedEpisodesViewModel = new ListViewModel<YTrack>();
     }
+
+#region Commands
+
+    /// <summary>
+    ///     Command to start a background download of data
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> LoadDataCommand { get; }
+
+#endregion
 
 #region Properties
 
-    public SmartPlaylistsViewModel SmartPlaylistsViewModel { get; set; }
-    public PodcastEpisodesViewModel PodcastEpisodesViewModel { get; set; }
+    public CardsViewModel<YPlaylist> SmartPlaylistsViewModel { get; set; }
+    public ListViewModel<YTrack> RecommendedEpisodesViewModel { get; set; }
 
 #endregion
 
@@ -47,51 +61,47 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
 
 #endregion
 
-#region Commands
-
-    public ReactiveCommand<Unit, Unit> FindTrackCommand { get; }
-    public ReactiveCommand<Unit, Unit> PlayCommand { get; }
-    public ReactiveCommand<Unit, Unit> StopCommand { get; }
-
-    /// <summary>
-    ///     Command to start a background download of data
-    /// </summary>
-    public ReactiveCommand<Unit, Unit> LoadDataCommand { get; }
-
-#endregion
-
 #region Methods
-
-    // test method
-    public async Task FindTrack()
-    {
-        var authStorage = AuthStorageService.GetInstance();
-        var api = new YandexMusicApi();
-        var getTrackId = (await api.Library.GetLikedTracksAsync(authStorage)).Result.Library.Tracks.First().Id;
-        var track = (await api.Track.GetAsync(authStorage, getTrackId)).Result.First();
-        _trackPlayer.Tracks.Add(track);
-    }
-
-    // test method
-    private async Task PlayTrackAsync()
-    {
-        _trackPlayer.SelectCommand.Execute(0).Subscribe();
-        await _trackPlayer.PlayAsyncCommand.Execute();
-    }
 
     /// <summary>
     ///     Starts a background download of data
     /// </summary>
     private async Task LoadDataAsync()
     {
-        await SmartPlaylistsViewModel.LoadSmartPlaylistsCommand.Execute();
-        await PodcastEpisodesViewModel.LoadPodcastsCommand.Execute();
+        await LoadSmartPlaylistsAsync();
+        await LoadPodcastsAsync();
     }
 
-    // test method
-    private void StopTrack()
+    private async Task LoadSmartPlaylistsAsync()
     {
-        _trackPlayer.PauseCommand.Execute().Subscribe();
+        var api = new YandexMusicApi();
+        var storage = AuthStorageService.GetInstance();
+
+        var ofTheDay = await api.Playlist.OfTheDayAsync(storage);
+        var premiere = await api.Playlist.PremiereAsync(storage);
+        var alice = await api.Playlist.AliceAsync(storage);
+        var podcasts = await api.Playlist.PodcastsAsync(storage);
+        var dejaVu = await api.Playlist.DejaVuAsync(storage);
+        var missed = await api.Playlist.MissedAsync(storage);
+
+        if (ofTheDay != null) SmartPlaylistsViewModel.Source.Add(ofTheDay.Result);
+        if (premiere != null) SmartPlaylistsViewModel.Source.Add(premiere.Result);
+        if (alice != null) SmartPlaylistsViewModel.Source.Add(alice.Result);
+        if (podcasts != null) SmartPlaylistsViewModel.Source.Add(podcasts.Result);
+        if (dejaVu != null) SmartPlaylistsViewModel.Source.Add(dejaVu.Result);
+        if (missed != null) SmartPlaylistsViewModel.Source.Add(missed.Result);
+    }
+
+    private async Task LoadPodcastsAsync()
+    {
+        var api = new YandexMusicApi();
+        var storage = AuthStorageService.GetInstance();
+
+        var episodes = await api.Playlist.PodcastsAsync(storage);
+
+        if (episodes != null)
+            foreach (var episode in episodes.Result.Tracks)
+                RecommendedEpisodesViewModel.Source.Add(episode.Track);
     }
 
 #endregion

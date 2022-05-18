@@ -12,7 +12,7 @@
         <Grid Grid.Row="1"
               ColumnDefinitions="*,Auto">
             <controls:PodcastEpisodesView x:Name="PodcastEpisodesView"
-                                Margin="15"/>
+                                          Margin="15" />
         </Grid>
     </Grid>
 

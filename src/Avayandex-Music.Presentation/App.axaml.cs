@@ -5,9 +5,7 @@ using Avayandex_Music.Core.Playbacks.Audio;
 using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Core.Services;
 using Avayandex_Music.Core.Storages;
-using Avayandex_Music.Presentation.ViewModels.Controls;
 using Avayandex_Music.Presentation.Views;
-using Avayandex_Music.Presentation.Views.Controls;
 using Splat;
 
 namespace Avayandex_Music.Presentation;
@@ -24,7 +22,6 @@ public class App : Application
         // register views
         Locator.CurrentMutable.Register(() => new HomeView(), typeof(IViewFor<HomeViewModel>));
         Locator.CurrentMutable.Register(() => new PlaylistView(), typeof(IViewFor<PlaylistViewModel>));
-        Locator.CurrentMutable.Register(() => new PodcastEpisodesView(), typeof(IViewFor<PodcastEpisodesViewModel>));
 
         // register services
         Locator.CurrentMutable.Register(() => new LoginService(), typeof(ILoginService));
