@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Avayandex_Music.Presentation.Views.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Avayandex_Music.Presentation.Views.Controls.SearchResultView">
+    <Grid RowDefinitions="Auto, Auto">
+        <controls:SearchBarView x:Name="SearchBarView" />
+
+        <ScrollViewer Height="600" Grid.Row="1">
+            <StackPanel>
+                <controls:ArtistsCardsView x:Name="ArtistsCardsView"
+                                           Margin="15" ></controls:ArtistsCardsView>
+                <controls:PlaylistsCardsView x:Name="PlaylistsCardsView"
+                                           Margin="15"></controls:PlaylistsCardsView>
+                <controls:AlbumsCardsView x:Name="AlbumsCardsView"
+                                             Margin="15"></controls:AlbumsCardsView>
+                <controls:TracksListView x:Name="PodcastEpisodesList"
+                                         Margin="15"></controls:TracksListView>
+                <controls:TracksListView x:Name="TracksList"
+                                         Margin="15"></controls:TracksListView>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

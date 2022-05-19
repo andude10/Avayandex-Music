@@ -11,36 +11,48 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**"/>
-        <None Remove=".gitignore"/>
+        <AvaloniaResource Include="Assets\**" />
+        <None Remove=".gitignore" />
+        <None Remove="Views\Controls\SearchResultView.axaml~" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Aura.UI" Version="0.1.4.2"/>
-        <PackageReference Include="Aura.UI.FluentTheme" Version="0.1.4.2"/>
-        <PackageReference Include="Avalonia" Version="0.10.13"/>
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.13"/>
+        <PackageReference Include="Aura.UI" Version="0.1.4.2" />
+        <PackageReference Include="Aura.UI.FluentTheme" Version="0.1.4.2" />
+        <PackageReference Include="Avalonia" Version="0.10.13" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.13" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.13"/>
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.13"/>
-        <PackageReference Include="KM.Yandex.Music.Api" Version="1.0.0"/>
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.13" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.13" />
+        <PackageReference Include="KM.Yandex.Music.Api" Version="1.0.0" />
         <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="ReactiveUI" Version="17.1.50"/>
-        <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4"/>
+        <PackageReference Include="ReactiveUI" Version="17.1.50" />
+        <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Avayandex-Music.Core\Avayandex-Music.Core.csproj"/>
+        <ProjectReference Include="..\Avayandex-Music.Core\Avayandex-Music.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="ReactiveUI"/>
-        <Using Include="System.Reactive"/>
-        <Using Include="Avalonia.ReactiveUI"/>
+        <Using Include="ReactiveUI" />
+        <Using Include="System.Reactive" />
+        <Using Include="Avalonia.ReactiveUI" />
 
-        <Using Include="Avayandex_Music.Presentation.ViewModels"/>
+        <Using Include="Avayandex_Music.Presentation.ViewModels" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Controls\ArtistsCardsView.axaml.cs">
+        <DependentUpon>ArtistCardsView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Controls\AlbumsCardsView.axaml.cs">
+        <DependentUpon>AlbumsCardsView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

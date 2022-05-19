@@ -5,12 +5,16 @@
              xmlns:controls="clr-namespace:Avayandex_Music.Presentation.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Avayandex_Music.Presentation.Views.HomeView">
-    <Grid Grid.Row="1" RowDefinitions="*,*">
-        <controls:PlaylistsCardsView x:Name="SmartPlaylists"
-                                     Margin="15" />
+    <Grid RowDefinitions="Auto, *">
+        <controls:SearchBarView x:Name="SearchBarView" />
 
-        <controls:TracksListView Grid.Row="1" x:Name="PodcastEpisodes"
-                                 Margin="15" />
+        <Grid Grid.Row="1" RowDefinitions="*,*">
+            <controls:PlaylistsCardsView x:Name="SmartPlaylists"
+                                         Margin="15" />
+
+            <controls:TracksListView Grid.Row="1" x:Name="PodcastEpisodes"
+                                     Margin="15" />
+        </Grid>
     </Grid>
 
 </UserControl>

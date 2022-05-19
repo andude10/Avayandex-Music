@@ -34,6 +34,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         });
 
         RecommendedEpisodesViewModel = new ListViewModel<YTrack>();
+        SearchBarViewModel = new SearchBarViewModel(screen);
     }
 
 #region Commands
@@ -47,6 +48,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
 
 #region Properties
 
+    public SearchBarViewModel SearchBarViewModel { get; set; }
     public CardsViewModel<YPlaylist> SmartPlaylistsViewModel { get; set; }
     public ListViewModel<YTrack> RecommendedEpisodesViewModel { get; set; }
 
@@ -97,10 +99,10 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         var api = new YandexMusicApi();
         var storage = AuthStorageService.GetInstance();
 
-        var episodes = await api.Playlist.PodcastsAsync(storage);
+        var response = await api.Playlist.PodcastsAsync(storage);
 
-        if (episodes != null)
-            foreach (var episode in episodes.Result.Tracks)
+        if (response != null)
+            foreach (var episode in response.Result.Tracks)
                 RecommendedEpisodesViewModel.Source.Add(episode.Track);
     }
 
