@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:track="clr-namespace:Yandex.Music.Api.Models.Track;assembly=Yandex.Music.Api"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Avayandex_Music.Presentation.Views.Controls.PodcastEpisodesView">
+             x:Class="Avayandex_Music.Presentation.Views.Controls.TracksListView">
 
     <StackPanel>
         <TextBlock FontWeight="Bold"
@@ -12,7 +12,7 @@
             Yandex music podcasts
         </TextBlock>
 
-        <ListBox x:Name="EpisodesListBox">
+        <ListBox x:Name="TracksListBox">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="track:YTrack">
                     <Label Content="{Binding Title}" Margin="15" />

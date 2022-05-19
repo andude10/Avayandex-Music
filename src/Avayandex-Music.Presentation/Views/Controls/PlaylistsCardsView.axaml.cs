@@ -6,9 +6,9 @@ using Yandex.Music.Api.Models.Playlist;
 
 namespace Avayandex_Music.Presentation.Views.Controls;
 
-public partial class SmartPlaylistsView : ReactiveUserControl<CardsViewModel<YPlaylist>>
+public partial class PlaylistsCardsView : ReactiveUserControl<CardsViewModel<YPlaylist>>
 {
-    public SmartPlaylistsView()
+    public PlaylistsCardsView()
     {
         this.WhenActivated(d =>
         {
