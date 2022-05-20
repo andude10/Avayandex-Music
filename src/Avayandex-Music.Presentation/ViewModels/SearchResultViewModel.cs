@@ -119,8 +119,10 @@ public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
 
     private async Task SearchAsync()
     {
-        await SearchArtistsAsync();
-        await SearchPlaylistsAsync();
+        var searchArtists = SearchArtistsAsync();
+        var searchPlaylists = SearchPlaylistsAsync();
+
+        await Task.WhenAll(searchArtists, searchPlaylists);
     }
     
     private async Task SearchArtistsAsync()

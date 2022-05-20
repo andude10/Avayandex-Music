@@ -2,6 +2,7 @@ using Avayandex_Music.Core.Services;
 using Avayandex_Music.Presentation.ViewModels.Controls;
 using DynamicData;
 using Yandex.Music.Api;
+using Yandex.Music.Api.Models.Common;
 using Yandex.Music.Api.Models.Playlist;
 using Yandex.Music.Api.Models.Track;
 
@@ -70,8 +71,10 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     /// </summary>
     private async Task LoadDataAsync()
     {
-        await LoadSmartPlaylistsAsync();
-        await LoadPodcastsAsync();
+        var loadSmartPlaylists = LoadSmartPlaylistsAsync();
+        var loadPodcasts = LoadPodcastsAsync();
+
+        await Task.WhenAll(loadSmartPlaylists, loadPodcasts);
     }
 
     private async Task LoadSmartPlaylistsAsync()
@@ -79,19 +82,28 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         var api = new YandexMusicApi();
         var storage = AuthStorageService.GetInstance();
 
-        var ofTheDay = await api.Playlist.OfTheDayAsync(storage);
-        var premiere = await api.Playlist.PremiereAsync(storage);
-        var alice = await api.Playlist.AliceAsync(storage);
-        var podcasts = await api.Playlist.PodcastsAsync(storage);
-        var dejaVu = await api.Playlist.DejaVuAsync(storage);
-        var missed = await api.Playlist.MissedAsync(storage);
+        var requestsTasks = new List<Task<YResponse<YPlaylist>?>>
+        {
+            api.Playlist.OfTheDayAsync(storage),
+            api.Playlist.PremiereAsync(storage),
+            api.Playlist.AliceAsync(storage),
+            api.Playlist.PodcastsAsync(storage),
+            api.Playlist.DejaVuAsync(storage),
+            api.Playlist.MissedAsync(storage),
+        };
 
-        if (ofTheDay != null) SmartPlaylistsViewModel.Source.Add(ofTheDay.Result);
-        if (premiere != null) SmartPlaylistsViewModel.Source.Add(premiere.Result);
-        if (alice != null) SmartPlaylistsViewModel.Source.Add(alice.Result);
-        if (podcasts != null) SmartPlaylistsViewModel.Source.Add(podcasts.Result);
-        if (dejaVu != null) SmartPlaylistsViewModel.Source.Add(dejaVu.Result);
-        if (missed != null) SmartPlaylistsViewModel.Source.Add(missed.Result);
+        while (requestsTasks.Any())
+        {
+            var task = await Task.WhenAny(requestsTasks);
+            requestsTasks.Remove(task);
+            
+            var response = await task;
+
+            if (response != null)
+            {
+                SmartPlaylistsViewModel.Source.Add(response.Result);
+            }
+        }
     }
 
     private async Task LoadPodcastsAsync()
