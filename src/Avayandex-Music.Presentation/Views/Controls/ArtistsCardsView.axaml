@@ -5,8 +5,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Avayandex_Music.Presentation.Views.Controls.ArtistsCardsView">
     <CardCollection x:Name="ArtistsCardCollection"
+                    Header=""
                     ShowHeader="False"
-                    Columns="4"
                     TileMode="HorizontalDisposition"
                     Height="400" />
 </UserControl>

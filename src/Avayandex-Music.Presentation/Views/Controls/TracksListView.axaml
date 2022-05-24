@@ -7,11 +7,6 @@
              x:Class="Avayandex_Music.Presentation.Views.Controls.TracksListView">
 
     <StackPanel>
-        <TextBlock FontWeight="Bold"
-                   Margin="10">
-            Yandex music podcasts
-        </TextBlock>
-
         <ListBox x:Name="TracksListBox">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="track:YTrack">
