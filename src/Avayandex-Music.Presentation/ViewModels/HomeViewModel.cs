@@ -71,10 +71,17 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     /// </summary>
     private async Task LoadDataAsync()
     {
-        var loadSmartPlaylists = LoadSmartPlaylistsAsync();
-        var loadPodcasts = LoadPodcastsAsync();
+        var loadingTasks = new List<Task>
+        {
+            LoadSmartPlaylistsAsync(),
+            LoadPodcastsAsync()
+        };
 
-        await Task.WhenAll(loadSmartPlaylists, loadPodcasts);
+        while (loadingTasks.Any())
+        {
+            var finishedTask = await Task.WhenAny(loadingTasks);
+            loadingTasks.Remove(finishedTask);
+        }
     }
 
     private async Task LoadSmartPlaylistsAsync()
@@ -89,20 +96,17 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
             api.Playlist.AliceAsync(storage),
             api.Playlist.PodcastsAsync(storage),
             api.Playlist.DejaVuAsync(storage),
-            api.Playlist.MissedAsync(storage),
+            api.Playlist.MissedAsync(storage)
         };
 
         while (requestsTasks.Any())
         {
-            var task = await Task.WhenAny(requestsTasks);
-            requestsTasks.Remove(task);
-            
-            var response = await task;
+            var finishedTask = await Task.WhenAny(requestsTasks);
+            requestsTasks.Remove(finishedTask);
 
-            if (response != null)
-            {
-                SmartPlaylistsViewModel.Source.Add(response.Result);
-            }
+            var response = finishedTask.Result;
+
+            if (response != null) SmartPlaylistsViewModel.Source.Add(response.Result);
         }
     }
 
