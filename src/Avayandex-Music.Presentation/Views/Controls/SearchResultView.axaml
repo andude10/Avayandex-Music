@@ -11,15 +11,13 @@
         <ScrollViewer Height="600" Grid.Row="1">
             <StackPanel>
                 <controls:ArtistsCardsView x:Name="ArtistsCardsView"
-                                           Margin="15" ></controls:ArtistsCardsView>
+                                           Margin="15" />
                 <controls:PlaylistsCardsView x:Name="PlaylistsCardsView"
-                                           Margin="15"></controls:PlaylistsCardsView>
+                                             Margin="15" />
                 <controls:AlbumsCardsView x:Name="AlbumsCardsView"
-                                             Margin="15"></controls:AlbumsCardsView>
-                <controls:TracksListView x:Name="PodcastEpisodesList"
-                                         Margin="15"></controls:TracksListView>
+                                          Margin="15" />
                 <controls:TracksListView x:Name="TracksList"
-                                         Margin="15"></controls:TracksListView>
+                                         Margin="15" />
             </StackPanel>
         </ScrollViewer>
     </Grid>
