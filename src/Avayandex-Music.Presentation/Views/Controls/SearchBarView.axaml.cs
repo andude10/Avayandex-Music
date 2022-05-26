@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avayandex_Music.Presentation.ViewModels.Controls;
 
 namespace Avayandex_Music.Presentation.Views.Controls;
 

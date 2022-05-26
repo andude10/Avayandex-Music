@@ -34,9 +34,38 @@
                     <TextBlock Text="Home"
                                TextAlignment="Center" />
                 </Button>
+                
+                <Label HorizontalContentAlignment="Center"
+                       FontWeight="Bold"
+                       Margin="0,20,0,0">My music</Label>
+                
+                <Button Width="100"
+                        Command="{Binding NavigateToTracksCommand}">
+                    <TextBlock Text="Tracks"
+                               TextAlignment="Center" />
+                </Button>
+                
                 <Button Width="100"
                         Command="{Binding NavigateToMyMusicCommand}">
-                    <TextBlock Text="My music"
+                    <TextBlock Text="Albums"
+                               TextAlignment="Center" />
+                </Button>
+                
+                <Button Width="100"
+                        Command="{Binding NavigateToMyMusicCommand}">
+                    <TextBlock Text="Artists"
+                               TextAlignment="Center" />
+                </Button>
+                
+                <Button Width="100"
+                        Command="{Binding NavigateToMyMusicCommand}">
+                    <TextBlock Text="Playlists"
+                               TextAlignment="Center" />
+                </Button>
+                
+                <Button Width="100"
+                        Command="{Binding NavigateToMyMusicCommand}">
+                    <TextBlock Text="My files"
                                TextAlignment="Center" />
                 </Button>
             </StackPanel>

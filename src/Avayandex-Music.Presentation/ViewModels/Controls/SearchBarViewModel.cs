@@ -4,7 +4,7 @@ using Avayandex_Music.Core.Services;
 using DynamicData;
 using Yandex.Music.Api;
 
-namespace Avayandex_Music.Presentation.ViewModels;
+namespace Avayandex_Music.Presentation.ViewModels.Controls;
 
 public class SearchBarViewModel : ViewModelBase
 {

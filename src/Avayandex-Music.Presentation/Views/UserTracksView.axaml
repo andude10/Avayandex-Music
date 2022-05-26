@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:track="clr-namespace:Yandex.Music.Api.Models.Track;assembly=Yandex.Music.Api"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Avayandex_Music.Presentation.Views.UserTracksView">
+    <Grid RowDefinitions="Auto,*">
+        <StackPanel>
+            <Label FontWeight="Bold"
+                   FontSize="20"
+                   Margin="20,20,20,5">Tracks</Label>
+        
+            <Button Grid.Row="0" x:Name="StartPlayButton"
+                    Width="100" Height="30" Margin="10">
+                Start play
+            </Button>
+        </StackPanel>
+
+        <ListBox Grid.Row="1" x:Name="TracksListBox">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="track:YTrack">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding Title}" />
+                        <Label Content="{Binding PreviewDurationMs}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

@@ -14,6 +14,9 @@ public class MainWindowViewModel : ViewModelBase, IScreen
         NavigateToMyMusicCommand = ReactiveCommand.CreateFromObservable(
             () => Router.Navigate.Execute(new MyMusicViewModel(this))
         );
+        NavigateToTracksCommand = ReactiveCommand.CreateFromObservable(
+            () => Router.Navigate.Execute(new UserTracksViewModel(this))
+        );
 
         var trackPlayer = Locator.Current.GetService<ITrackPlayer>()
                           ?? throw new InvalidOperationException();
@@ -30,6 +33,7 @@ public class MainWindowViewModel : ViewModelBase, IScreen
 
     public RoutingState Router { get; } = new();
 
+    public ReactiveCommand<Unit, IRoutableViewModel> NavigateToTracksCommand { get; }
     public ReactiveCommand<Unit, IRoutableViewModel> NavigateToMyMusicCommand { get; }
 
     public ReactiveCommand<Unit, IRoutableViewModel> NavigateToHomeCommand { get; }
