@@ -1,10 +1,10 @@
 using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avayandex_Music.Presentation.ViewModels.Controls;
+using Avayandex_Music.Presentation.Views.Controls;
 using ReactiveMarbles.ObservableEvents;
 
-namespace Avayandex_Music.Presentation.Views.Controls;
+namespace Avayandex_Music.Presentation.Views;
 
 public partial class SearchResultView : ReactiveUserControl<SearchResultViewModel>
 {

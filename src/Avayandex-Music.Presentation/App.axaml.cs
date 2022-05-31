@@ -9,6 +9,7 @@ using Avayandex_Music.Presentation.ViewModels.Controls;
 using Avayandex_Music.Presentation.Views;
 using Avayandex_Music.Presentation.Views.Controls;
 using Splat;
+using SearchResultView = Avayandex_Music.Presentation.Views.SearchResultView;
 
 namespace Avayandex_Music.Presentation;
 

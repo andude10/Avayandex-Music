@@ -1,3 +1,4 @@
+using Avayandex_Music.Core.API.Extensions;
 using Avayandex_Music.Core.Services;
 using Avayandex_Music.Presentation.ViewModels.Controls;
 using DynamicData;
@@ -35,6 +36,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         });
 
         RecommendedEpisodesViewModel = new ListViewModel<YTrack>();
+        ChartTracksViewModel = new ListViewModel<YTrack>();
         SearchBarViewModel = new SearchBarViewModel(screen);
     }
 
@@ -52,6 +54,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
     public SearchBarViewModel SearchBarViewModel { get; set; }
     public CardsViewModel<YPlaylist> SmartPlaylistsViewModel { get; set; }
     public ListViewModel<YTrack> RecommendedEpisodesViewModel { get; set; }
+    public ListViewModel<YTrack> ChartTracksViewModel { get; set; }
 
 #endregion
 
@@ -74,7 +77,8 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         var loadingTasks = new List<Task>
         {
             LoadSmartPlaylistsAsync(),
-            LoadPodcastsAsync()
+            LoadPodcastsAsync(),
+            LoadChartAsync()
         };
 
         while (loadingTasks.Any())
@@ -118,8 +122,30 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         var response = await api.Playlist.PodcastsAsync(storage);
 
         if (response != null)
-            foreach (var episode in response.Result.Tracks)
-                RecommendedEpisodesViewModel.Source.Add(episode.Track);
+        {
+            for (var i = 0; i < 15; i++)
+            {
+                var track = response.Result.Tracks[i];
+                RecommendedEpisodesViewModel.Source.Add(track.Track);
+            }
+        }
+    }
+
+    private async Task LoadChartAsync()
+    {
+        var api = new YandexMusicApi();
+        var storage = AuthStorageService.GetInstance();
+
+        var getChartResponse = await api.GetChartAsync(storage);
+
+        if (getChartResponse != null)
+        {
+            for (var i = 0; i < 15; i++)
+            {
+                var track = getChartResponse.Result.ChartPlaylist.Tracks[i];
+                ChartTracksViewModel.Source.Add(track.Track);
+            }
+        }
     }
 
 #endregion

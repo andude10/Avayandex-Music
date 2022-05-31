@@ -1,4 +1,5 @@
 using Avayandex_Music.Core.Services;
+using Avayandex_Music.Presentation.ViewModels.Controls;
 using DynamicData;
 using Yandex.Music.Api;
 using Yandex.Music.Api.Models.Album;
@@ -6,7 +7,7 @@ using Yandex.Music.Api.Models.Artist;
 using Yandex.Music.Api.Models.Playlist;
 using Yandex.Music.Api.Models.Track;
 
-namespace Avayandex_Music.Presentation.ViewModels.Controls;
+namespace Avayandex_Music.Presentation.ViewModels;
 
 public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
 {

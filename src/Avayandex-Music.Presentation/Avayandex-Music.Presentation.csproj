@@ -54,5 +54,9 @@
         <DependentUpon>AlbumsCardsView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Views\SearchResultView.axaml.cs">
+        <DependentUpon>SearchResultView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

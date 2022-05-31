@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Avayandex_Music.Presentation.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Avayandex_Music.Presentation.Views.Controls.SearchResultView">
+             x:Class="Avayandex_Music.Presentation.Views.SearchResultView">
     <Grid RowDefinitions="Auto, Auto">
         <controls:SearchBarView x:Name="SearchBarView" />
 
