@@ -11,7 +11,8 @@
         </Grid.ColumnDefinitions>
 
         <AutoCompleteBox x:Name="SearchBox"
-                         Margin="10" />
+                         Margin="10"
+                         Classes="Search-text-box"/>
 
         <Button Grid.Column="1" x:Name="SearchButton"
                 Margin="10">

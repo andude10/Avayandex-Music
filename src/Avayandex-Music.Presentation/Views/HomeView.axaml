@@ -4,31 +4,41 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Avayandex_Music.Presentation.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Avayandex_Music.Presentation.Views.HomeView">
-    <Grid RowDefinitions="Auto, *">
-        <controls:SearchBarView x:Name="SearchBarView" />
-
-        <ScrollViewer Grid.Row="1"
-                      Height="600">
-            <Grid RowDefinitions="*,*">
-                <controls:PlaylistsCardsView x:Name="SmartPlaylists"
+             x:Class="Avayandex_Music.Presentation.Views.HomeView"
+             Background="{StaticResource LightBackgroundBrush}">
+    <UserControl.Styles>
+        <Style Selector="Border.Card">
+            <Setter Property="Padding" Value="2"></Setter>
+            <Setter Property="Margin" Value="7"></Setter>
+        </Style>
+    </UserControl.Styles>
+    
+    <ScrollViewer Height="600">
+        <Grid RowDefinitions="*,*,*,*">
+            <Border Classes="Card Hoverable">
+                <controls:SearchBarView x:Name="SearchBarView" />
+            </Border>
+                
+            <Border Grid.Row="1" Classes="Card Hoverable">
+                <controls:PlaylistsCardsView x:Name="SmartPlaylists"/>
+            </Border>
+                
+            <Border Grid.Row="2" Classes="Card Hoverable">
+                <StackPanel>
+                    <Label Margin="15" FontWeight="Bold">Yandex Music Chart</Label>
+                    <controls:TracksListView x:Name="ChartTracks"
                                              Margin="15" />
-
-                <StackPanel Grid.Row="1">
-                    <StackPanel>
-                        <Label Margin="15" FontWeight="Bold">Yandex Music Chart</Label>
-                        <controls:TracksListView x:Name="ChartTracks"
-                                                 Margin="15" />
-                    </StackPanel>
-            
-                    <StackPanel>
-                        <Label Margin="15" FontWeight="Bold">Podcasts</Label>
-                        <controls:TracksListView x:Name="PodcastEpisodes"
-                                                 Margin="15" />
-                    </StackPanel>
                 </StackPanel>
-            </Grid>
-        </ScrollViewer>
-    </Grid>
+            </Border>
+                
+            <Border Grid.Row="3" Classes="Card Hoverable">
+                <StackPanel>
+                    <Label Margin="15" FontWeight="Bold">Podcasts</Label>
+                    <controls:TracksListView x:Name="PodcastEpisodes"
+                                             Margin="15" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
 
 </UserControl>
