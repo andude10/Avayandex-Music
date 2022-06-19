@@ -16,7 +16,7 @@
 
     <!-- MainWindow STYLES -->
     <Style Selector="Border.Nav-panel">
-        <Setter Property="Background" Value="White"></Setter>
+        <Setter Property="Background" Value="{StaticResource LightBackgroundBrush}"></Setter>
         <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}"></Setter>
         <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}"></Setter>
     </Style>

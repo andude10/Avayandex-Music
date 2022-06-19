@@ -6,8 +6,8 @@
                 <ResourceInclude Source="/Assets/Styles/Constants.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="NavButtonBrush" Color="#B3B3B3" Opacity="0.3" />
-            <SolidColorBrush x:Key="NavButtonBrushHighlight" Color="#CCCCCC" Opacity="0.8" />
+            <SolidColorBrush x:Key="NavButtonBrush" Color="#E6E6E6" Opacity="0.4" />
+            <SolidColorBrush x:Key="NavButtonBrushHighlight" Color="#CCCCCC" Opacity="0.4" />
         </ResourceDictionary>
     </Styles.Resources>
     
@@ -37,7 +37,7 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
     </Style>
-    <Style Selector="Button.nav-button:pointerover /template/ ContentPresenter">
+    <Style Selector="Button.Nav-button:pointerover /template/ ContentPresenter">
         <Style.Animations>
             <Animation Duration="0:0:0.2"
                        FillMode="Both">
