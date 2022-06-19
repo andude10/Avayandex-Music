@@ -1,0 +1,85 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StyleInclude Source="avares://SukiUI/Theme/Index.xaml"/>
+    
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/Styles/Constants.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <Design.PreviewWith>
+        <StackPanel Margin="20">
+            <AutoCompleteBox Margin="10" Width="300"
+                             Classes="Search-text-box" >
+                <AutoCompleteBox.Items>
+                    Alabama
+                    Alaska
+                    Arizona
+                    Arkansas
+                    California
+                    Colorado
+                    Connecticut
+                    Delaware
+                </AutoCompleteBox.Items>
+            </AutoCompleteBox>
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <!-- SearchBarView STYLES -->
+    <Style Selector="AutoCompleteBox.Search-text-box">
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Padding" Value="10"></Setter>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid Name="PART_LayoutRoot">
+                    <TextBox Name="PART_TextBox"
+                             Watermark="{TemplateBinding Watermark}"
+                             Width="{TemplateBinding Width}"
+                             Foreground="{TemplateBinding Foreground}"
+                             Background="{TemplateBinding Background}"
+                             BorderBrush="{TemplateBinding BorderBrush}"
+                             BorderThickness="{TemplateBinding BorderThickness}"
+                             CornerRadius="{TemplateBinding CornerRadius}"
+                             FontSize="{TemplateBinding FontSize}"
+                             FontFamily="{TemplateBinding FontFamily}"
+                             FontWeight="{TemplateBinding FontWeight}"
+                             Padding="{TemplateBinding Padding}"
+                             Margin="0"
+                             DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}" />
+
+                    <Popup Name="PART_Popup"
+                           WindowManagerAddShadowHint="False"
+                           MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                           MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                           IsLightDismissEnabled="True"
+                           PlacementTarget="{TemplateBinding}">
+                        <Border Name="PART_SuggestionsContainer"
+                                Classes="Card"
+                                Padding="{DynamicResource AutoCompleteListMargin}"
+                                BorderThickness="{DynamicResource AutoCompleteListBorderThemeThickness}"
+                                BorderBrush="{DynamicResource AutoCompleteBoxSuggestionsListBorderBrush}"
+                                Background="{DynamicResource AutoCompleteBoxSuggestionsListBackground}"
+                                CornerRadius="{DynamicResource OverlayCornerRadius}">
+                            <ListBox Name="PART_SelectingItemsControl"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     ItemTemplate="{TemplateBinding ItemTemplate}"
+                                     Margin="{DynamicResource AutoCompleteListPadding}" />
+                        </Border>
+                    </Popup>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    
+    <Style Selector="AutoCompleteBox.Search-text-box:dropdownopen">
+        <Setter Property="Background" Value="Red" />
+    </Style>
+
+
+</Styles>

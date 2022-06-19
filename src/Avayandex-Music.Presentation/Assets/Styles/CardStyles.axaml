@@ -1,0 +1,65 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/Styles/Constants.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+    
+    <Design.PreviewWith>
+        <StackPanel Margin="20">
+            <CardCollection Header="Default">
+                <CardCollection.Items>
+                    <CardControl Header="Beatles"></CardControl>
+                    <CardControl Header="Beatles"></CardControl>
+                </CardCollection.Items>
+            </CardCollection>
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <!-- DEFAULT CardControl STYLE -->
+    <Style Selector="CardControl">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border CornerRadius="{TemplateBinding CornerRadius}"
+                        Background="{TemplateBinding Background}"
+                        Margin="{TemplateBinding Padding}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}">
+                    <Grid RowDefinitions="*, Auto">
+                        <Grid Grid.Row="0" RowDefinitions="*">
+                            <ContentPresenter  Name="PART_ContentPresenter"
+                                               Content="{TemplateBinding Content}"
+                                               ContentTemplate="{TemplateBinding ContentTemplate}"
+                                               CornerRadius="{TemplateBinding TopCornerRadius}"
+                                               Padding="{TemplateBinding InternalPadding}" />
+                        </Grid>
+                        <Border Grid.Row="1" ClipToBounds="false"
+                                Background="{TemplateBinding SecondaryBackground}"
+                                CornerRadius="{TemplateBinding BottomCornerRadius}">
+                            <ExperimentalAcrylicBorder Material="{DynamicResource SystemAcrylicAltHighBrush}"
+                                                       CornerRadius="{TemplateBinding BottomCornerRadius}">
+                                <Grid ColumnDefinitions="20,*,20" RowDefinitions="20,*,10,*,20">
+                                    <ContentPresenter Grid.Column="1"
+                                                      Grid.Row="1"
+                                                      Name="PART_HeaderPresenter"
+                                                      Content="{TemplateBinding Header}"
+                                                      ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                      TextBlock.FontSize="18" />
+                                    <ContentPresenter Grid.Column="1"
+                                                      Grid.Row="3"
+                                                      Content="{TemplateBinding SecondaryHeader}"
+                                                      TextBlock.Foreground="{DynamicResource SystemControlBackgroundBaseMediumHighBrush}" />
+                                </Grid>
+                            </ExperimentalAcrylicBorder>
+                        </Border>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    
+</Styles>
