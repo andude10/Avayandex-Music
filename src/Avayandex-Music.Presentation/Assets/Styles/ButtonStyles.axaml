@@ -10,7 +10,7 @@
             <SolidColorBrush x:Key="NavButtonBrushHighlight" Color="#CCCCCC" Opacity="0.4" />
         </ResourceDictionary>
     </Styles.Resources>
-    
+
     <Design.PreviewWith>
         <Border Padding="20"
                 Height="500"
@@ -22,14 +22,17 @@
                 <Button Classes="Nav-button" Margin="5">
                     <TextBlock>Navigation button</TextBlock>
                 </Button>
+                <Button Classes="Nav-button-selected" Margin="5">
+                    <TextBlock>Selected navigation button</TextBlock>
+                </Button>
             </StackPanel>
         </Border>
     </Design.PreviewWith>
 
     <!-- DEFAULT STYLES -->
     <Style Selector="Button">
-        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}"></Setter>
-        <Setter Property="Padding" Value="8"></Setter>
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="Padding" Value="8" />
     </Style>
 
     <!-- MainWindow STYLES -->
@@ -50,13 +53,13 @@
             </Animation>
         </Style.Animations>
     </Style>
-    
+
     <Style Selector="Button.Nav-button-selected">
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
         <Setter Property="Template">
             <ControlTemplate>
-                <StackPanel>
+                <DockPanel LastChildFill="True">
                     <ContentPresenter x:Name="PART_ContentPresenter"
                                       Background="{TemplateBinding Background}"
                                       BorderBrush="{TemplateBinding BorderBrush}"
@@ -67,12 +70,14 @@
                                       Padding="{TemplateBinding Padding}"
                                       RecognizesAccessKey="True"
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    <Border Background="Black"
-                            Height="3"
-                            Margin="0,-5,0,0"
-                            CornerRadius="{StaticResource DefCornerRadius}"></Border>
-                </StackPanel>
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      Width="{TemplateBinding Width}" />
+                    <Border DockPanel.Dock="Right"
+                            Background="{StaticResource PrimaryBrush}"
+                            Width="10"
+                            Margin="0,2,0,2"
+                            CornerRadius="{StaticResource DefCornerRadius}" />
+                </DockPanel>
             </ControlTemplate>
         </Setter>
     </Style>
