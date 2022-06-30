@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avayandex_Music.Presentation.Views.Controls;
@@ -17,6 +18,10 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
             if (ViewModel != null) d(ViewModel.Router.CurrentViewModel.Subscribe(HighlightNavigationButton));
         });
         AvaloniaXamlLoader.Load(this);
+
+#if DEBUG
+        this.AttachDevTools();
+#endif
     }
 
 #region Methods
