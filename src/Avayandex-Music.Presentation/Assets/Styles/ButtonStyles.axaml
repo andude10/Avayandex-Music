@@ -25,6 +25,8 @@
                 <Button Classes="Nav-button-selected" Margin="5">
                     <TextBlock>Selected navigation button</TextBlock>
                 </Button>
+                <Button Classes="Play-button" Margin="5" />
+                <Button Classes="Pause-button" Margin="5" />
             </StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -94,4 +96,29 @@
             </Animation>
         </Style.Animations>
     </Style>
+
+    <!-- TrackView STYLES -->
+    <Style Selector="Button.Play-button">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Image Source="/Assets/Icons/play-icon.png"
+                           Height="25" Width="25"
+                           VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="Button.Pause-button">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Image Source="/Assets/Icons/pause-icon.png"
+                           Height="25" Width="25"
+                           VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </Styles>
