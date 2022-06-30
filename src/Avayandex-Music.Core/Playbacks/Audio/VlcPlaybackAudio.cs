@@ -1,3 +1,4 @@
+using System.Reactive.Linq;
 using LibVLCSharp.Shared;
 
 namespace Avayandex_Music.Core.Playbacks.Audio;
@@ -6,6 +7,7 @@ public class VlcPlaybackAudio : PlaybackAudio
 {
     private readonly LibVLC _libVlc;
     private readonly MediaPlayer _mediaPlayer;
+    private PlaybackState _state;
 
     public VlcPlaybackAudio()
     {
@@ -24,7 +26,11 @@ public class VlcPlaybackAudio : PlaybackAudio
 
 #region Properties
 
-    public override PlaybackState State { get; protected set; }
+    public override PlaybackState State
+    {
+        get => _state;
+        protected set => this.RaiseAndSetIfChanged(ref _state, value);
+    }
 
 #endregion
 
