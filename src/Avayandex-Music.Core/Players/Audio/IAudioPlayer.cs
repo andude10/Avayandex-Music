@@ -42,5 +42,7 @@ public interface IAudioPlayer
 
     public PlaybackState State { get; }
 
+    public IObservable<(PlaybackState, YTrack)> StateChange { get; }
+
 #endregion
 }

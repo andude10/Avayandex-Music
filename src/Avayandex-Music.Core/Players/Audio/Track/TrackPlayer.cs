@@ -13,6 +13,12 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
         _storage = storage;
         _playbackAudio = playbackAudio;
 
+        this.WhenAnyValue(player => player.PlaybackAudio)
+            .Subscribe(playback =>
+            {
+                StateChange = this.WhenAnyValue(player => player.PlaybackAudio.State, player => player.ActualTrack);
+            });
+
         var isSelectedTrackNotNull = this.WhenAnyValue(player => player.SelectedTrack)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Select(x => x != null);
@@ -46,6 +52,8 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
 
     public PlaybackState State => _playbackAudio.State;
 
+    public IObservable<(PlaybackState, YTrack)> StateChange { get; protected set; }
+
     /// <summary>
     ///     All tracks in the player
     /// </summary>
@@ -59,6 +67,18 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
     {
         get => _selectedTrack;
         private set => this.RaiseAndSetIfChanged(ref _selectedTrack, value);
+    }
+
+    private YTrack ActualTrack
+    {
+        get => _actualTrack;
+        set => this.RaiseAndSetIfChanged(ref _actualTrack, value);
+    }
+
+    private PlaybackAudio PlaybackAudio
+    {
+        get => _playbackAudio;
+        set => this.RaiseAndSetIfChanged(ref _playbackAudio, value);
     }
 
 #endregion
@@ -111,18 +131,18 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
             throw new InvalidOperationException("SelectedTrack is null. Most likely, one of the Select*" +
                                                 " methods was not called to select a track to play.");
 
-        if (_actualTrack.Equals(SelectedTrack))
+        if (ActualTrack.Equals(SelectedTrack))
         {
             _playbackAudio.Play();
         }
         else
         {
-            _actualTrack = SelectedTrack;
+            ActualTrack = SelectedTrack;
 
             var filePath = await _storage.LoadTrackAsync(SelectedTrack);
 
-            _playbackAudio = _playbackAudio.CreatePlayback(filePath);
-            _playbackAudio.Play();
+            PlaybackAudio = _playbackAudio.CreatePlayback(filePath);
+            PlaybackAudio.Play();
         }
     }
 
