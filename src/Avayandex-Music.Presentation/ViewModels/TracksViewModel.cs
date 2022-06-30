@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using Avayandex_Music.Core.Playbacks;
 using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Presentation.ViewModels.Controls;
 using DynamicData;
@@ -8,7 +9,7 @@ using Yandex.Music.Api.Models.Track;
 
 namespace Avayandex_Music.Presentation.ViewModels;
 
-public class PlaylistViewModel : ViewModelBase, IRoutableViewModel
+public class TracksViewModel : ViewModelBase, IRoutableViewModel
 {
 #region Fields
 
@@ -16,31 +17,39 @@ public class PlaylistViewModel : ViewModelBase, IRoutableViewModel
 
 #endregion
 
-    public PlaylistViewModel(IScreen screen)
+    public TracksViewModel(IScreen hostScreen)
     {
-        HostScreen = screen;
+        HostScreen = hostScreen;
         TrackPlayer = Locator.Current.GetService<ITrackPlayer>()
                       ?? throw new InvalidOperationException();
+
         TrackPlayer.Tracks.Connect()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _tracksCollection)
             .Subscribe();
 
-        StartPlayCommand = ReactiveCommand.Create(StartPlay);
+        PlayOrPauseCommand = ReactiveCommand.CreateFromTask<YTrack>(PlayOrPause);
     }
 
 #region Commands
 
-    public ReactiveCommand<Unit, Unit> StartPlayCommand { get; }
+    public ReactiveCommand<YTrack, Unit> PlayOrPauseCommand { get; }
 
 #endregion
 
 #region Methods
 
-    private void StartPlay()
+    private async Task PlayOrPause(YTrack track)
     {
-        PlayerDockViewModel.SetPlayer(TrackPlayer);
-        PlayerDockViewModel.Instance.TrackPlayer.SelectCommand.Execute(0).Subscribe();
+        if (PlayerDockViewModel.Instance.TrackPlayer != TrackPlayer) PlayerDockViewModel.SetPlayer(TrackPlayer);
+
+        var trackPosition = TrackPlayer.Tracks.Items.IndexOf(track);
+        TrackPlayer.SelectCommand.Execute(trackPosition).Subscribe();
+
+        if (TrackPlayer.State != PlaybackState.Playing)
+            await TrackPlayer.PlayAsyncCommand.Execute();
+        else
+            TrackPlayer.PauseCommand.Execute().Subscribe();
     }
 
 #endregion

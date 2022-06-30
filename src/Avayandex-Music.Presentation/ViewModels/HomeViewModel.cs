@@ -22,7 +22,7 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
 
             if (playlist == null) return;
 
-            var vm = new PlaylistViewModel(HostScreen);
+            var vm = new TracksViewModel(HostScreen);
             for (var i = 0; i < playlist.Tracks.Count(); i++) vm.TrackPlayer.Tracks.Add(playlist.Tracks[i].Track);
             HostScreen.Router.Navigate.Execute(vm);
         });
@@ -122,13 +122,11 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         var response = await api.Playlist.PodcastsAsync(storage);
 
         if (response != null)
-        {
             for (var i = 0; i < 15; i++)
             {
                 var track = response.Result.Tracks[i];
                 RecommendedEpisodesViewModel.Source.Add(track.Track);
             }
-        }
     }
 
     private async Task LoadChartAsync()
@@ -139,13 +137,11 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
         var getChartResponse = await api.GetChartAsync(storage);
 
         if (getChartResponse != null)
-        {
             for (var i = 0; i < 15; i++)
             {
                 var track = getChartResponse.Result.ChartPlaylist.Tracks[i];
                 ChartTracksViewModel.Source.Add(track.Track);
             }
-        }
     }
 
 #endregion
