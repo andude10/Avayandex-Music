@@ -6,8 +6,8 @@
                 <ResourceInclude Source="/Assets/Styles/Constants.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="NavButtonBrush" Color="#E6E6E6" Opacity="0.4" />
-            <SolidColorBrush x:Key="NavButtonBrushHighlight" Color="#CCCCCC" Opacity="0.4" />
+            <SolidColorBrush x:Key="NavButtonBrush" Color="Transparent" />
+            <SolidColorBrush x:Key="SelectedNavButtonBrush" Color="White" Opacity="0.5" />
         </ResourceDictionary>
     </Styles.Resources>
 
@@ -34,7 +34,10 @@
     <!-- DEFAULT STYLES -->
     <Style Selector="Button">
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="Background" Value="{StaticResource DefButtonBackground}" />
         <Setter Property="Padding" Value="8" />
+        <Setter Property="BorderBrush" Value="{StaticResource DefBorderBrush}" />
+        <Setter Property="BorderThickness" Value="{StaticResource DefBorderThickness}" />
     </Style>
 
     <!-- MainWindow STYLES -->
@@ -42,23 +45,10 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
     </Style>
-    <Style Selector="Button.Nav-button:pointerover /template/ ContentPresenter">
-        <Style.Animations>
-            <Animation Duration="0:0:0.2"
-                       FillMode="Both">
-                <KeyFrame Cue="0%">
-                    <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
-                </KeyFrame>
-                <KeyFrame Cue="100%">
-                    <Setter Property="Background" Value="{DynamicResource NavButtonBrushHighlight}" />
-                </KeyFrame>
-            </Animation>
-        </Style.Animations>
-    </Style>
 
     <Style Selector="Button.Nav-button-selected">
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SelectedNavButtonBrush}" />
         <Setter Property="Template">
             <ControlTemplate>
                 <DockPanel LastChildFill="True">
@@ -77,24 +67,11 @@
                     <Border DockPanel.Dock="Right"
                             Background="{StaticResource PrimaryBrush}"
                             Width="10"
-                            Margin="0,2,0,2"
+                            Margin="-5,1,0,1"
                             CornerRadius="{StaticResource DefCornerRadius}" />
                 </DockPanel>
             </ControlTemplate>
         </Setter>
-    </Style>
-    <Style Selector="Button.Nav-button-selected:pointerover /template/ ContentPresenter">
-        <Style.Animations>
-            <Animation Duration="0:0:0.2"
-                       FillMode="Both">
-                <KeyFrame Cue="0%">
-                    <Setter Property="Background" Value="{DynamicResource NavButtonBrush}" />
-                </KeyFrame>
-                <KeyFrame Cue="100%">
-                    <Setter Property="Background" Value="{DynamicResource NavButtonBrushHighlight}" />
-                </KeyFrame>
-            </Animation>
-        </Style.Animations>
     </Style>
 
     <!-- TrackView STYLES -->
