@@ -7,10 +7,10 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
-    
-    <StyleInclude Source="/Assets/Styles/ButtonStyles.axaml"/>
-    <StyleInclude Source="/Assets/Styles/BorderStyles.axaml"/>
-    <StyleInclude Source="/Assets/Styles/CardStyles.axaml"/>
-    <StyleInclude Source="/Assets/Styles/WindowStyles.axaml"/>
-    <StyleInclude Source="/Assets/Styles/TextControlStyles.axaml"></StyleInclude>
+
+    <StyleInclude Source="/Assets/Styles/ButtonStyles.axaml" />
+    <StyleInclude Source="/Assets/Styles/CardStyles.axaml" />
+    <StyleInclude Source="/Assets/Styles/WindowStyles.axaml" />
+    <StyleInclude Source="/Assets/Styles/TextControlStyles.axaml" />
+    <StyleInclude Source="/Assets/Styles/ListsStyles.axaml" />
 </Styles>

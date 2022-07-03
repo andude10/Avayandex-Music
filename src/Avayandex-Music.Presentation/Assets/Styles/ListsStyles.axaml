@@ -1,0 +1,65 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Assets/Styles/Constants.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="TracksListItemBackground" Color="White" />
+        </ResourceDictionary>
+    </Styles.Resources>
+    <StyleInclude Source="avares://SukiUI/Theme/Index.xaml" />
+
+    <Design.PreviewWith>
+        <StackPanel Margin="20">
+            <ListBox Classes="Tracks-list"
+                     Width="200" Height="250">
+                <ListBox.Items>
+                    <ListBoxItem>Item1</ListBoxItem>
+                    <ListBoxItem>Item2</ListBoxItem>
+                    <ListBoxItem>Item3</ListBoxItem>
+                    <ListBoxItem>Item1</ListBoxItem>
+                    <ListBoxItem>Item2</ListBoxItem>
+                    <ListBoxItem>Item3</ListBoxItem>
+                    <ListBoxItem>Item1</ListBoxItem>
+                    <ListBoxItem>Item2</ListBoxItem>
+                    <ListBoxItem>Item3</ListBoxItem>
+                </ListBox.Items>
+            </ListBox>
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <!-- TracksView -->
+    <Style Selector="ListBox.Tracks-list">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VirtualizationMode" Value="None" />
+    </Style>
+    <Style Selector="ListBox.Tracks-list ListBoxItem">
+        <Setter Property="Margin" Value="20,10,20,10" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="Background" Value="{StaticResource TracksListItemBackground}" />
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{TemplateBinding Background}"
+                        Padding="{TemplateBinding Padding}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Background="Transparent"
+                                      BorderBrush="Transparent"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      CornerRadius="{TemplateBinding CornerRadius}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Content="{TemplateBinding Content}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="ListBox.Tracks-list ListBoxItem:selected">
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+    </Style>
+
+</Styles>
