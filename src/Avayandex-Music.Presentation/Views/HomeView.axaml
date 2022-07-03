@@ -8,30 +8,30 @@
              Background="{StaticResource LightBackgroundBrush}">
     <UserControl.Styles>
         <Style Selector="Border.Card">
-            <Setter Property="Padding" Value="2"></Setter>
-            <Setter Property="Margin" Value="7"></Setter>
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="Margin" Value="7" />
         </Style>
     </UserControl.Styles>
-    
+
     <ScrollViewer Height="600">
         <Grid RowDefinitions="*,*,*,*">
-            <Border Classes="Card Hoverable">
+            <Border Classes="Card">
                 <controls:SearchBarView x:Name="SearchBarView" />
             </Border>
-                
-            <Border Grid.Row="1" Classes="Card Hoverable">
-                <controls:PlaylistsCardsView x:Name="SmartPlaylists"/>
+
+            <Border Grid.Row="1" Classes="Card">
+                <controls:PlaylistsCardsView x:Name="SmartPlaylists" />
             </Border>
-                
-            <Border Grid.Row="2" Classes="Card Hoverable">
+
+            <Border Grid.Row="2" Classes="Card">
                 <StackPanel>
                     <Label Margin="15" FontWeight="Bold">Yandex Music Chart</Label>
                     <controls:TracksListView x:Name="ChartTracks"
                                              Margin="15" />
                 </StackPanel>
             </Border>
-                
-            <Border Grid.Row="3" Classes="Card Hoverable">
+
+            <Border Grid.Row="3" Classes="Card">
                 <StackPanel>
                     <Label Margin="15" FontWeight="Bold">Podcasts</Label>
                     <controls:TracksListView x:Name="PodcastEpisodes"
