@@ -1,3 +1,5 @@
+using System.Reactive.Linq;
+using Avayandex_Music.Core.Playbacks;
 using Avayandex_Music.Core.Players.Audio.Track;
 using Splat;
 
@@ -10,7 +12,19 @@ public class PlayerDockViewModel : ViewModelBase
     private PlayerDockViewModel(ITrackPlayer trackPlayer)
     {
         TrackPlayer = trackPlayer;
+
+        var canPlayerCommandsExecute = this.WhenAnyObservable(vm => vm.TrackPlayer.PlayAsyncCommand.CanExecute,
+                vm => vm.TrackPlayer.PauseCommand.CanExecute, (b1, b2) => b1 | b2)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Select(x => x);
+        PlayOrPauseCommand = ReactiveCommand.CreateFromTask(PlayOrPause, canPlayerCommandsExecute);
     }
+
+#region Commands
+
+    public ReactiveCommand<Unit, Unit> PlayOrPauseCommand { get; }
+
+#endregion
 
 #region Properties
 
@@ -40,6 +54,14 @@ public class PlayerDockViewModel : ViewModelBase
         Instance.TrackPlayer.Dispose();
 
         Instance.TrackPlayer = trackPlayer;
+    }
+
+    private async Task PlayOrPause()
+    {
+        if (TrackPlayer.State != PlaybackState.Playing)
+            await TrackPlayer.PlayAsyncCommand.Execute();
+        else
+            TrackPlayer.PauseCommand.Execute().Subscribe();
     }
 
 #endregion
