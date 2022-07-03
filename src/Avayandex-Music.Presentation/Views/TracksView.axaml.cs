@@ -35,7 +35,6 @@ public partial class TracksView : ReactiveUserControl<TracksViewModel>
     /// <param name="args">The current state of the player and the current track</param>
     private void ChangePlayButtonIcon((PlaybackState, YTrack) args)
     {
-        Console.WriteLine("ChangePlayButtonIcon work");
         if (ViewModel == null ||
             args.Item1 == PlaybackState.Nothing) return;
 
@@ -47,10 +46,10 @@ public partial class TracksView : ReactiveUserControl<TracksViewModel>
         {
             // Find the Label with the name of the current track
             if (!label.Content.Equals(args.Item2.Title)) continue;
-            // In the DockPanel where the Label is located, find the button that we are looking for
-            if (label.Parent is not DockPanel itemPanel) continue;
+            // In the Grid where the Label is located, find the button that we are looking for
+            if (label.Parent is not Grid grid) continue;
 
-            var panelButtons = itemPanel.GetVisualDescendants().OfType<Button>();
+            var panelButtons = grid.GetVisualDescendants().OfType<Button>();
             foreach (var button in panelButtons)
             {
                 if (!(button.Classes.Contains("Play-button") | button.Classes.Contains("Pause-button"))) continue;

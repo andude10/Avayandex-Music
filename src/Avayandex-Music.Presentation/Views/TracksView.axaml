@@ -7,31 +7,30 @@
              x:Class="Avayandex_Music.Presentation.Views.TracksView"
              x:Name="Level1Lister">
 
-    <StackPanel>
-        <ListBox x:Name="TracksListBox">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="track:YTrack">
+    <ListBox x:Name="TracksListBox"
+             Classes="Tracks-list">
+        <ListBox.ItemTemplate>
+            <DataTemplate DataType="track:YTrack">
+                <Grid>
+                    <Label Content="{Binding Title}"
+                           Margin="15"
+                           DockPanel.Dock="Left"
+                           MinWidth="600"
+                           VerticalContentAlignment="Center"
+                           HorizontalAlignment="Left" />
 
-                    <DockPanel>
-                        <Label Content="{Binding Title}"
-                               Margin="15"
-                               DockPanel.Dock="Left"
-                               MinWidth="600"
-                               VerticalContentAlignment="Center" />
+                    <StackPanel HorizontalAlignment="Right"
+                                Orientation="Horizontal">
 
-                        <StackPanel DockPanel.Dock="Right"
-                                    Orientation="Horizontal">
-
-                            <Button Margin="10"
-                                    Command="{Binding ElementName=Level1Lister,
+                        <Button Margin="10"
+                                Command="{Binding ElementName=Level1Lister,
                                     Path=DataContext.PlayOrPauseCommand}"
-                                    CommandParameter="{Binding .}"
-                                    Classes="Play-button" />
-                        </StackPanel>
-                    </DockPanel>
+                                CommandParameter="{Binding .}"
+                                Classes="Play-button" />
+                    </StackPanel>
+                </Grid>
 
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </StackPanel>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
 </UserControl>
