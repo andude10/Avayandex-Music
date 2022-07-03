@@ -34,7 +34,8 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 
         if (vmType == typeof(HomeViewModel))
         {
-            FindNavigateToHomeButton.Classes.Replace("Nav-button", "Nav-button-selected");
+            if (FindNavigateToHomeButton.Classes.Contains("Nav-button"))
+                FindNavigateToHomeButton.Classes.Replace("Nav-button", "Nav-button-selected");
         }
         else
         {
@@ -44,7 +45,8 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 
         if (vmType == typeof(UserTracksViewModel))
         {
-            FindNavigateToTracksButton.Classes.Replace("Nav-button", "Nav-button-selected");
+            if (FindNavigateToTracksButton.Classes.Contains("Nav-button"))
+                FindNavigateToTracksButton.Classes.Replace("Nav-button", "Nav-button-selected");
         }
         else
         {
@@ -54,7 +56,8 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 
         if (vmType == typeof(MyMusicViewModel))
         {
-            FindNavigateToMyMusicButton.Classes.Replace("Nav-button", "Nav-button-selected");
+            if (FindNavigateToMyMusicButton.Classes.Contains("Nav-button"))
+                FindNavigateToMyMusicButton.Classes.Replace("Nav-button", "Nav-button-selected");
         }
         else
         {

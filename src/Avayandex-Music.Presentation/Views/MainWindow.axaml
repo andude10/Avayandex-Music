@@ -14,83 +14,84 @@
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="Auto, *">
+    <Grid RowDefinitions="*, Auto">
+        <Grid ColumnDefinitions="Auto, *">
 
-        <Border Classes="Nav-panel"
-                Width="170">
-            <StackPanel Orientation="Vertical"
-                        Margin="15">
-                <StackPanel.Styles>
-                    <Style Selector="StackPanel > :is(Control)">
-                        <Setter Property="Margin" Value="2" />
-                    </Style>
-                    <Style Selector="StackPanel > TextBlock">
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                        <Setter Property="HorizontalAlignment" Value="Center" />
-                        <Setter Property="FontSize" Value="18" />
-                    </Style>
+            <Border Background="{StaticResource NavPanelBackground}"
+                    Width="170">
+                <StackPanel Orientation="Vertical"
+                            Margin="15">
+                    <StackPanel.Styles>
+                        <Style Selector="StackPanel > :is(Control)">
+                            <Setter Property="Margin" Value="2" />
+                        </Style>
+                        <Style Selector="StackPanel > TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="FontSize" Value="18" />
+                        </Style>
 
-                    <Style Selector="StackPanel > Button">
-                        <Setter Property="HorizontalAlignment" Value="Center" />
-                        <Setter Property="HorizontalContentAlignment" Value="Left" />
-                        <Setter Property="Width" Value="130" />
-                    </Style>
+                        <Style Selector="StackPanel > Button">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            <Setter Property="Width" Value="130" />
+                        </Style>
 
-                    <Style Selector="StackPanel > Button > TextBlock">
-                        <Setter Property="HorizontalAlignment" Value="Left" />
-                        <Setter Property="Margin" Value="10,0,0,0" />
-                        <Setter Property="TextAlignment" Value="Center" />
-                        <Setter Property="FontSize" Value="16" />
-                        <Setter Property="FontWeight" Value="Medium" />
-                    </Style>
-                </StackPanel.Styles>
+                        <Style Selector="StackPanel > Button > TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="Margin" Value="5,0,0,0" />
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="FontSize" Value="16" />
+                            <Setter Property="FontWeight" Value="Medium" />
+                        </Style>
+                    </StackPanel.Styles>
 
-                <Button Command="{Binding NavigateToHomeCommand}"
-                        Classes="Nav-button"
-                        Width="130"
-                        x:Name="NavigateToHomeButton">
-                    <TextBlock Text="Home"
-                               TextAlignment="Center" />
-                </Button>
+                    <Button Command="{Binding NavigateToHomeCommand}"
+                            Classes="Nav-button"
+                            Width="130"
+                            x:Name="NavigateToHomeButton">
+                        <TextBlock Text="Home"
+                                   TextAlignment="Center" />
+                    </Button>
 
-                <TextBlock FontWeight="Heavy"
-                           Margin="0,15,0,5">
-                    My music
-                </TextBlock>
+                    <TextBlock FontWeight="SemiBold"
+                               HorizontalAlignment="Left"
+                               Margin="20,20,0,5"
+                               Classes="h5">
+                        My music
+                    </TextBlock>
 
-                <Button Command="{Binding NavigateToTracksCommand}"
-                        Classes="Nav-button"
-                        x:Name="NavigateToTracksButton">
-                    <TextBlock Text="Tracks" />
-                </Button>
+                    <Button Command="{Binding NavigateToTracksCommand}"
+                            Classes="Nav-button"
+                            x:Name="NavigateToTracksButton">
+                        <TextBlock Text="Tracks" />
+                    </Button>
 
-                <Button Command="{Binding NavigateToMyMusicCommand}"
-                        Classes="Nav-button"
-                        x:Name="NavigateToMyMusicButton">
-                    <TextBlock Text="Albums" />
-                </Button>
+                    <Button Command="{Binding NavigateToMyMusicCommand}"
+                            Classes="Nav-button"
+                            x:Name="NavigateToMyMusicButton">
+                        <TextBlock Text="Albums" />
+                    </Button>
 
-                <Button Command="{Binding NavigateToMyMusicCommand}"
-                        Classes="Nav-button">
-                    <TextBlock Text="Artists" />
-                </Button>
+                    <Button Command="{Binding NavigateToMyMusicCommand}"
+                            Classes="Nav-button">
+                        <TextBlock Text="Artists" />
+                    </Button>
 
-                <Button Command="{Binding NavigateToMyMusicCommand}"
-                        Classes="Nav-button">
-                    <TextBlock Text="Playlists" />
-                </Button>
+                    <Button Command="{Binding NavigateToMyMusicCommand}"
+                            Classes="Nav-button">
+                        <TextBlock Text="Playlists" />
+                    </Button>
 
-                <Button Command="{Binding NavigateToMyMusicCommand}"
-                        Classes="Nav-button"
-                        HorizontalContentAlignment="Left">
-                    <TextBlock Text="Downloads" />
-                </Button>
-            </StackPanel>
-        </Border>
+                    <Button Command="{Binding NavigateToMyMusicCommand}"
+                            Classes="Nav-button"
+                            HorizontalContentAlignment="Left">
+                        <TextBlock Text="Downloads" />
+                    </Button>
+                </StackPanel>
+            </Border>
 
-        <Grid Grid.Column="1" RowDefinitions="*, Auto">
-
-            <rxui:RoutedViewHost Router="{Binding Router}">
+            <rxui:RoutedViewHost Grid.Column="1" Router="{Binding Router}">
                 <rxui:RoutedViewHost.DefaultContent>
                     <TextBlock Text="Default content"
                                HorizontalAlignment="Center"
@@ -98,8 +99,11 @@
                 </rxui:RoutedViewHost.DefaultContent>
             </rxui:RoutedViewHost>
 
-            <controls:PlayerDockView Grid.Row="1" x:Name="PlayerDockView" />
         </Grid>
+
+        <controls:PlayerDockView x:Name="PlayerDockView"
+                                 Grid.Row="1"
+                                 Height="75" />
 
     </Grid>
 </Window>
