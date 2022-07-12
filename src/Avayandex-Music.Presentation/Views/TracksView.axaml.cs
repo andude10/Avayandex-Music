@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using Avayandex_Music.Core.Playbacks;
@@ -14,6 +16,12 @@ public partial class TracksView : ReactiveUserControl<TracksViewModel>
         {
             d(this.OneWayBind(ViewModel, vm => vm.TracksCollection,
                 view => view.FindTracksListBox.Items));
+            d(this.OneWayBind(ViewModel, vm => vm.Selection,
+                view => view.FindTracksListBox.Selection));
+            d(this.OneWayBind(ViewModel, vm => vm.SelectionMode,
+                view => view.FindTracksListBox.SelectionMode));
+            d(this.Bind(ViewModel, vm => vm.SelectedItem,
+                view => view.FindTracksListBox.SelectedItem));
 
             if (ViewModel != null)
                 d(ViewModel.TrackPlayer.StateChange.Subscribe(ChangePlayButtonIcon));
@@ -26,6 +34,11 @@ public partial class TracksView : ReactiveUserControl<TracksViewModel>
     public ListBox FindTracksListBox => this.FindControl<ListBox>(nameof(TracksListBox));
 
 #endregion
+
+    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        Console.WriteLine("клик");
+    }
 
 #region Methods
 
@@ -71,6 +84,11 @@ public partial class TracksView : ReactiveUserControl<TracksViewModel>
             playingTrackButton.Classes.Remove("Pause-button");
             playingTrackButton.Classes.Add("Play-button");
         }
+    }
+
+    private void PlayOrPauseButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
     }
 
 #endregion
