@@ -8,6 +8,9 @@
 
             <SolidColorBrush x:Key="NavButtonBrush" Color="Transparent" />
             <SolidColorBrush x:Key="SelectedNavButtonBrush" Color="White" Opacity="0.5" />
+
+            <SolidColorBrush x:Key="TrackPanelButtonBrush" Color="Gray" Opacity="0.2" />
+            <SolidColorBrush x:Key="TrackPanelButtonHoverBrush" Color="Gray" Opacity="0.3" />
         </ResourceDictionary>
     </Styles.Resources>
 
@@ -74,28 +77,38 @@
         </Setter>
     </Style>
 
-    <!-- TrackView STYLES -->
     <Style Selector="Button.Play-button">
+        <Setter Property="Background" Value="{StaticResource TrackPanelButtonBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <Image Source="/Assets/Icons/play-icon.png"
-                           Height="25" Width="25"
+                           Height="20" Width="20"
                            VerticalAlignment="Center" HorizontalAlignment="Center" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+    <Style Selector="Button.Play-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource TrackPanelButtonHoverBrush}" />
+    </Style>
+
     <Style Selector="Button.Pause-button">
+        <Setter Property="Background" Value="{StaticResource TrackPanelButtonBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <Image Source="/Assets/Icons/pause-icon.png"
-                           Height="25" Width="25"
+                           Height="20" Width="20"
                            VerticalAlignment="Center" HorizontalAlignment="Center" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    <Style Selector="Button.Pause-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource TrackPanelButtonHoverBrush}" />
     </Style>
 
 </Styles>
