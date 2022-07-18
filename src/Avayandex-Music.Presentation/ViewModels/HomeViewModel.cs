@@ -23,7 +23,9 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
             if (playlist == null) return;
 
             var vm = new TracksViewModel(HostScreen);
-            for (var i = 0; i < playlist.Tracks.Count(); i++) vm.TrackPlayer.Tracks.Add(playlist.Tracks[i].Track);
+            foreach (var t in playlist.Tracks)
+                vm.TrackPlayer.Tracks.Add(t.Track);
+
             HostScreen.Router.Navigate.Execute(vm);
         });
 

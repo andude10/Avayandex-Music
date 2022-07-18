@@ -17,7 +17,7 @@ public class UserTracksViewModel : ViewModelBase, IRoutableViewModel
     private readonly ReadOnlyObservableCollection<YTrack> _tracksCollection;
 
 #endregion
-    
+
     public UserTracksViewModel(IScreen screen)
     {
         HostScreen = screen;
@@ -31,7 +31,7 @@ public class UserTracksViewModel : ViewModelBase, IRoutableViewModel
         StartPlayCommand = ReactiveCommand.Create(StartPlay);
         LoadTracksCommand = ReactiveCommand.CreateFromTask(LoadTracks);
     }
-    
+
 #region Commands
 
     public ReactiveCommand<Unit, Unit> StartPlayCommand { get; }
@@ -44,9 +44,9 @@ public class UserTracksViewModel : ViewModelBase, IRoutableViewModel
     private void StartPlay()
     {
         PlayerDockViewModel.SetPlayer(TrackPlayer);
-        PlayerDockViewModel.Instance.TrackPlayer.SelectCommand.Execute(0).Subscribe();
+        TrackPlayer.SelectedTrack = TrackPlayer.Tracks.Items.First();
     }
-    
+
     private async Task LoadTracks()
     {
         var api = new YandexMusicApi();
@@ -54,9 +54,9 @@ public class UserTracksViewModel : ViewModelBase, IRoutableViewModel
 
         var getTracksResponse = await api.Library.GetLikedTracksAsync(storage);
         var tracksIds = getTracksResponse.Result.Library.Tracks.ConvertAll(model => model.Id).ToList();
-        
+
         var getRequestsTasks = tracksIds.Select(id => api.Track.GetAsync(storage, id)).ToList();
-        
+
         while (getRequestsTasks.Any())
         {
             var finishedTask = await Task.WhenAny(getRequestsTasks);
@@ -76,7 +76,7 @@ public class UserTracksViewModel : ViewModelBase, IRoutableViewModel
     public ITrackPlayer TrackPlayer { get; }
 
 #endregion
-    
+
 #region IRoutableViewModel
 
     public IScreen HostScreen { get; }
