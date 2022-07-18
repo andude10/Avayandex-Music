@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using Avalonia.Controls;
-using Avalonia.Controls.Selection;
 using Avayandex_Music.Core.Playbacks;
 using Avayandex_Music.Core.Players.Audio.Track;
 using Avayandex_Music.Presentation.ViewModels.Controls;
@@ -19,37 +18,35 @@ public class TracksViewModel : ViewModelBase, IRoutableViewModel
         TrackPlayer = Locator.Current.GetService<ITrackPlayer>()
                       ?? throw new InvalidOperationException();
         _selectionMode = SelectionMode.Single;
-        _selection = new SelectionModel<YTrack>();
 
         TrackPlayer.Tracks.Connect()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _tracksCollection)
             .Subscribe();
 
-        PlayOrPauseCommand = ReactiveCommand.CreateFromTask<YTrack>(PlayOrPause);
+        PlayOrPausePlayerCommand = ReactiveCommand.CreateFromTask<YTrack?>(PlayOrPausePlayer);
+        SelectTrackCommand = ReactiveCommand.CreateFromTask<YTrack>(SelectTrack);
 
-        this.WhenAnyValue(vm => vm.SelectedItem)
-            .WhereNotNull()
-            .InvokeCommand(PlayOrPauseCommand);
+        this.WhenAnyValue(vm => vm.TrackPlayer.SelectedTrack)
+            .InvokeCommand(PlayOrPausePlayerCommand);
     }
 
 #region Commands
 
-    public ReactiveCommand<YTrack, Unit> PlayOrPauseCommand { get; }
+    public ReactiveCommand<YTrack?, Unit> PlayOrPausePlayerCommand { get; }
+
+    public ReactiveCommand<YTrack, Unit> SelectTrackCommand { get; }
 
 #endregion
 
 #region Methods
 
-    private async Task PlayOrPause(YTrack track)
+    private async Task PlayOrPausePlayer(YTrack? track)
     {
+        if ((track == null) & (TrackPlayer.SelectedTrack == null)) return;
         if (PlayerDockViewModel.Instance.TrackPlayer != TrackPlayer) PlayerDockViewModel.SetPlayer(TrackPlayer);
 
-        var trackIndex = TrackPlayer.Tracks.Items.IndexOf(track);
-
-        if (!track.Equals(SelectedItem)) Selection.Select(trackIndex);
-
-        TrackPlayer.SelectCommand.Execute(trackIndex).Subscribe();
+        if (track != null && !track.Equals(TrackPlayer.SelectedTrack)) TrackPlayer.SelectedTrack = track;
 
         if (TrackPlayer.State != PlaybackState.Playing)
             await TrackPlayer.PlayAsyncCommand.Execute();
@@ -57,13 +54,19 @@ public class TracksViewModel : ViewModelBase, IRoutableViewModel
             TrackPlayer.PauseCommand.Execute().Subscribe();
     }
 
+    private async Task SelectTrack(YTrack track)
+    {
+        if (track.Equals(TrackPlayer.SelectedTrack))
+            await PlayOrPausePlayerCommand.Execute();
+        else
+            TrackPlayer.SelectedTrack = track;
+    }
+
 #endregion
 
 #region Fields
 
     private readonly ReadOnlyObservableCollection<YTrack> _tracksCollection;
-    private YTrack? _selectedItem;
-    private ISelectionModel _selection;
     private SelectionMode _selectionMode;
 
 #endregion
@@ -74,22 +77,10 @@ public class TracksViewModel : ViewModelBase, IRoutableViewModel
 
     public ITrackPlayer TrackPlayer { get; }
 
-    public ISelectionModel Selection
-    {
-        get => _selection;
-        set => this.RaiseAndSetIfChanged(ref _selection, value);
-    }
-
     public SelectionMode SelectionMode
     {
         get => _selectionMode;
         set => this.RaiseAndSetIfChanged(ref _selectionMode, value);
-    }
-
-    public YTrack? SelectedItem
-    {
-        get => _selectedItem;
-        set => this.RaiseAndSetIfChanged(ref _selectedItem, value);
     }
 
 #endregion

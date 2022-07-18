@@ -11,7 +11,7 @@
              Classes="Tracks-list">
         <ListBox.ItemTemplate>
             <DataTemplate DataType="track:YTrack">
-                <Grid PointerPressed="InputElement_OnPointerPressed">
+                <Grid>
                     <Label Content="{Binding Title}"
                            Margin="15"
                            DockPanel.Dock="Left"
@@ -25,7 +25,7 @@
                         <Button Name="PlayOrPauseButton"
                                 Margin="10"
                                 Command="{Binding ElementName=Level1Lister,
-                                    Path=DataContext.PlayOrPauseCommand}"
+                                    Path=DataContext.SelectTrackCommand}"
                                 CommandParameter="{Binding .}"
                                 Classes="Play-button" />
                     </StackPanel>
