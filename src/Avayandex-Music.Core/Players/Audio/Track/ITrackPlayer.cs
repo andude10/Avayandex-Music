@@ -12,10 +12,10 @@ public interface ITrackPlayer : IAudioPlayer, IDisposable
     public SourceList<YTrack> Tracks { get; }
 
     /// <summary>
-    ///     The track selected in the player. (It plays, stops,
-    ///     etc.) To select a track, use the Select* methods
+    ///     The track selected in the player. (It plays, stops,  etc.)
+    ///     If property changes to a track that is not in the <c>Tracks</c>, then the track is added to <c>Tracks</c>
     /// </summary>
-    public YTrack? SelectedTrack { get; }
+    public YTrack? SelectedTrack { get; set; }
 
 #endregion
 }

@@ -27,8 +27,6 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
         PauseCommand = ReactiveCommand.Create(Pause, isSelectedTrackNotNull);
         StopCommand = ReactiveCommand.Create(Stop, isSelectedTrackNotNull);
 
-        SelectCommand = ReactiveCommand.Create<int>(Select);
-
         SelectNextCommand = ReactiveCommand.Create(SelectNext,
             Tracks.Connect()
                 .ToCollection()
@@ -66,7 +64,11 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
     public YTrack? SelectedTrack
     {
         get => _selectedTrack;
-        private set => this.RaiseAndSetIfChanged(ref _selectedTrack, value);
+        set
+        {
+            if (value != null && !Tracks.Items.Contains(value)) Tracks.Add(value);
+            this.RaiseAndSetIfChanged(ref _selectedTrack, value);
+        }
     }
 
     private YTrack ActualTrack
@@ -84,12 +86,6 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
 #endregion
 
 #region Commands
-
-    /// <summary>
-    ///     Command to select track to play by its index
-    ///     CanExecute is false when the last audio in the list is playing
-    /// </summary>
-    public ReactiveCommand<int, Unit> SelectCommand { get; }
 
     /// <summary>
     ///     Command to load the selected track
@@ -128,8 +124,7 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
     private async Task LoadAndPlayAsync()
     {
         if (SelectedTrack == null)
-            throw new InvalidOperationException("SelectedTrack is null. Most likely, one of the Select*" +
-                                                " methods was not called to select a track to play.");
+            throw new InvalidOperationException("SelectedTrack is null");
 
         if (ActualTrack.Equals(SelectedTrack))
         {
@@ -156,11 +151,6 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
     {
         if (SelectedTrack == null) throw new InvalidOperationException();
         _playbackAudio.Stop();
-    }
-
-    private void Select(int index)
-    {
-        SelectedTrack = Tracks.Items.ElementAt(index);
     }
 
     private void SelectNext()

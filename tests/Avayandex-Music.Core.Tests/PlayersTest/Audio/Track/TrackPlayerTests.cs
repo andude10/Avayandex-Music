@@ -29,11 +29,11 @@ public class TrackPlayerTests
         var track = (await api.Track.GetAsync(authStorage, TestTrack1Id)).Result.First();
 
         // Act
-        player.Tracks.Add(track);
-        player.SelectCommand.Execute(0).Subscribe();
+        player.SelectedTrack = track;
 
         // Assert
-        Assert.Equal(track, player.SelectedTrack);
+        Assert.True(player.SelectedTrack.Equals(track) &
+                    player.Tracks.Items.Contains(track));
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public class TrackPlayerTests
         // Act
         player.Tracks.Add(track1);
         player.Tracks.Add(track2);
-        player.SelectCommand.Execute(0).Subscribe();
+        player.SelectedTrack = track1;
         player.SelectNextCommand.Execute().Subscribe();
 
         // Assert
@@ -69,7 +69,7 @@ public class TrackPlayerTests
         // Act
         player.Tracks.Add(track1);
         player.Tracks.Add(track2);
-        player.SelectCommand.Execute(1).Subscribe();
+        player.SelectedTrack = track2;
         player.SelectPreviousCommand.Execute().Subscribe();
 
         // Assert
@@ -86,8 +86,7 @@ public class TrackPlayerTests
         var track = (await api.Track.GetAsync(authStorage, TestTrack1Id)).Result.First();
 
         // Act
-        player.Tracks.Add(track);
-        player.SelectCommand.Execute(0).Subscribe();
+        player.SelectedTrack = track;
         await player.PlayAsyncCommand.Execute();
 
         // Assert
@@ -104,8 +103,7 @@ public class TrackPlayerTests
         var track = (await api.Track.GetAsync(authStorage, TestTrack1Id)).Result.First();
 
         // Act
-        player.Tracks.Add(track);
-        player.SelectCommand.Execute(0).Subscribe();
+        player.SelectedTrack = track;
         await player.PlayAsyncCommand.Execute();
         player.PauseCommand.Execute().Subscribe();
 

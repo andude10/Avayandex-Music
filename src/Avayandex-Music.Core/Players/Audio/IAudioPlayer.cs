@@ -5,12 +5,6 @@ namespace Avayandex_Music.Core.Players.Audio;
 public interface IAudioPlayer
 {
     /// <summary>
-    ///     Command to select audio to play by its index
-    ///     CanExecute is false when the last audio in the list is playing
-    /// </summary>
-    public ReactiveCommand<int, Unit> SelectCommand { get; }
-
-    /// <summary>
     ///     Command to load the selected audio
     ///     (if it hasn't been loaded before) and play it.
     /// </summary>
