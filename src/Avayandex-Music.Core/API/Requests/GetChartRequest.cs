@@ -10,8 +10,8 @@ internal class GetChartRequest : YandexWebRequest
 
     public GetChartRequest Create()
     {
-        FormRequest(ApiRequestsUrls.Chart);
-        
+        FormRequest(Endpoints.Chart);
+
         return this;
     }
 }

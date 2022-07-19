@@ -1,8 +1,10 @@
 using System.Security.Cryptography;
 using System.Text;
+using Avayandex_Music.Core.API.Requests;
 using Avayandex_Music.Core.Services;
 using Yandex.Music.Api.Common;
 using Yandex.Music.Api.Models.Common;
+using Yandex.Music.Api.Models.Common.Cover;
 
 namespace Avayandex_Music.Core.Storages;
 
@@ -10,45 +12,94 @@ public class LinuxStorage : Storage
 {
     private const string StorageDirectory = "Cache";
     private const string TrackFileFormat = ".mp3";
+    private const string CoverFileFormat = ".png";
+
+    public LinuxStorage()
+    {
+        if (!Directory.Exists(StorageDirectory)) Directory.CreateDirectory(StorageDirectory);
+    }
+
+    private static bool CacheExists(string path)
+    {
+        var storageDirectory = new DirectoryInfo(StorageDirectory);
+        var filesInDir = storageDirectory.GetFiles()
+            .Select(file => file.Name);
+
+        return filesInDir.Contains(new FileInfo(path).Name);
+    }
+
+    private static string BuildFilePath(string id, string fileFormat)
+    {
+        return Path.Combine(StorageDirectory, id) + fileFormat;
+    }
+
+    private static string CreateId(object obj)
+    {
+        return obj switch
+        {
+            YTrack track => track.Id,
+            YCoverPic pic => pic.Dir.Split('/')[2],
+
+            _ => throw new NotSupportedException()
+        };
+    }
+
+    private static async Task<string> DownloadTrack(YTrack track, YandexMusicApi api, AuthStorage authStorage,
+        string path)
+    {
+        // get download link
+        var metaData = (await api.Track.GetMetadataForDownloadAsync(authStorage, track))
+            .Result.First();
+        var downloadInfo = await api.Track.GetDownloadFileInfoAsync(authStorage, metaData);
+        var url = BuildLinkForTrackDownload(metaData, downloadInfo);
+
+        await HttpDownloadTrackAsync(new HttpClient(), url, path);
+
+        return path;
+    }
+
+    private static async Task<string> DownloadCover(YCoverPic coverPic, string path)
+    {
+        var uri = new Uri($"{Endpoints.YandexAvatars}{coverPic.Dir}/{Endpoints.AvatarMiddleSize}");
+
+        using var httpClient = new HttpClient();
+
+        var imageBytes = await httpClient.GetByteArrayAsync(uri);
+        await File.WriteAllBytesAsync(path, imageBytes);
+
+        return path;
+    }
+
+#region Public methods
 
     public override async Task<string> LoadTrackAsync(YTrack track)
     {
         var api = new YandexMusicApi();
         var authStorage = AuthStorageService.GetInstance();
 
-        var path = GetPath(track.Id) ?? await DownloadTrack(track, api, authStorage);
+        var path = BuildFilePath(CreateId(track), TrackFileFormat);
 
-        return path;
+        return CacheExists(path)
+            ? path
+            : await DownloadTrack(track, api, authStorage, path);
     }
 
-    private static string? GetPath(string id)
+    public override async Task<string> LoadCoverAsync(YCover cover)
     {
-        if (!Directory.Exists(StorageDirectory)) Directory.CreateDirectory(StorageDirectory);
+        var path = BuildFilePath(CreateId(cover), CoverFileFormat);
 
-        var storageDirectory = new DirectoryInfo(StorageDirectory);
-        var filesInDir = storageDirectory.GetFiles("*" + id + "*.*");
+        if (cover is not YCoverPic pic) throw new NotSupportedException();
 
-        return filesInDir.Select(foundFile => foundFile.FullName).FirstOrDefault();
+        return CacheExists(path)
+            ? path
+            : await DownloadCover(pic, path);
     }
 
-    private static async Task<string> DownloadTrack(YTrack track, YandexMusicApi api, AuthStorage authStorage)
-    {
-        // get download link
-        var metaData = (await api.Track.GetMetadataForDownloadAsync(authStorage, track))
-            .Result.First();
-        var downloadInfo = await api.Track.GetDownloadFileInfoAsync(authStorage, metaData);
-        var url = BuildLinkForDownload(metaData, downloadInfo);
-
-        // download track from link
-        var path = Path.Combine(StorageDirectory, track.Id + TrackFileFormat);
-        await HttpDownloadFileAsync(new HttpClient(), url, path);
-
-        return path;
-    }
+#endregion
 
 #region Helper static methods
 
-    private static async Task HttpDownloadFileAsync(HttpClient httpClient, string url, string path)
+    private static async Task HttpDownloadTrackAsync(HttpClient httpClient, string url, string path)
     {
         using var response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
         await using var streamToReadFrom = await response.Content.ReadAsStreamAsync();
@@ -56,7 +107,7 @@ public class LinuxStorage : Storage
         await streamToReadFrom.CopyToAsync(streamToWriteTo);
     }
 
-    private static string BuildLinkForDownload(YTrackDownloadInfo mainDownloadResponse,
+    private static string BuildLinkForTrackDownload(YTrackDownloadInfo mainDownloadResponse,
         YStorageDownloadFile storageDownload)
     {
         var path = storageDownload.Path;

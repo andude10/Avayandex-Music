@@ -1,3 +1,5 @@
+using Yandex.Music.Api.Models.Common.Cover;
+
 namespace Avayandex_Music.Core.Storages;
 
 /// <summary>
@@ -15,4 +17,11 @@ public abstract class Storage
     /// </summary>
     /// <returns></returns>
     public abstract Task<string> LoadTrackAsync(YTrack track);
+
+    /// <summary>
+    ///     Loads cover into the storage and returns the full file name
+    /// </summary>
+    /// <param name="cover"></param>
+    /// <returns></returns>
+    public abstract Task<string> LoadCoverAsync(YCover cover);
 }
