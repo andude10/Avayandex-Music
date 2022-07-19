@@ -25,17 +25,18 @@ public class TracksViewModel : ViewModelBase, IRoutableViewModel
             .Subscribe();
 
         PlayOrPausePlayerCommand = ReactiveCommand.CreateFromTask<YTrack?>(PlayOrPausePlayer);
-        SelectTrackCommand = ReactiveCommand.CreateFromTask<YTrack>(SelectTrack);
+        PlayCommand = ReactiveCommand.CreateFromTask(PlayTrack);
 
         this.WhenAnyValue(vm => vm.TrackPlayer.SelectedTrack)
-            .InvokeCommand(PlayOrPausePlayerCommand);
+            .Select(_ => Unit.Default)
+            .InvokeCommand(PlayCommand);
     }
 
 #region Commands
 
     public ReactiveCommand<YTrack?, Unit> PlayOrPausePlayerCommand { get; }
 
-    public ReactiveCommand<YTrack, Unit> SelectTrackCommand { get; }
+    public ReactiveCommand<Unit, Unit> PlayCommand { get; }
 
 #endregion
 
@@ -46,7 +47,11 @@ public class TracksViewModel : ViewModelBase, IRoutableViewModel
         if ((track == null) & (TrackPlayer.SelectedTrack == null)) return;
         if (PlayerDockViewModel.Instance.TrackPlayer != TrackPlayer) PlayerDockViewModel.SetPlayer(TrackPlayer);
 
-        if (track != null && !track.Equals(TrackPlayer.SelectedTrack)) TrackPlayer.SelectedTrack = track;
+        if (track != null && !track.Equals(TrackPlayer.SelectedTrack))
+        {
+            TrackPlayer.SelectedTrack = track; // PlayTrack() starts
+            return;
+        }
 
         if (TrackPlayer.State != PlaybackState.Playing)
             await TrackPlayer.PlayAsyncCommand.Execute();
@@ -54,12 +59,13 @@ public class TracksViewModel : ViewModelBase, IRoutableViewModel
             TrackPlayer.PauseCommand.Execute().Subscribe();
     }
 
-    private async Task SelectTrack(YTrack track)
+    private async Task PlayTrack()
     {
-        if (track.Equals(TrackPlayer.SelectedTrack))
-            await PlayOrPausePlayerCommand.Execute();
-        else
-            TrackPlayer.SelectedTrack = track;
+        if (TrackPlayer.SelectedTrack == null) return;
+        if (PlayerDockViewModel.Instance.TrackPlayer != TrackPlayer) PlayerDockViewModel.SetPlayer(TrackPlayer);
+
+        TrackPlayer.StopCommand.Execute();
+        await TrackPlayer.PlayAsyncCommand.Execute();
     }
 
 #endregion

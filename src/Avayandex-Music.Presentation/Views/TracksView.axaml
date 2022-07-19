@@ -25,7 +25,7 @@
                         <Button Name="PlayOrPauseButton"
                                 Margin="10"
                                 Command="{Binding ElementName=Level1Lister,
-                                    Path=DataContext.SelectTrackCommand}"
+                                    Path=DataContext.PlayOrPausePlayerCommand}"
                                 CommandParameter="{Binding .}"
                                 Classes="Play-button" />
                     </StackPanel>

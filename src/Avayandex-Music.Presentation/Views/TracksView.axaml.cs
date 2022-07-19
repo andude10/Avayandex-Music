@@ -20,7 +20,10 @@ public partial class TracksView : ReactiveUserControl<TracksViewModel>
                 view => view.FindTracksListBox.SelectedItem));
 
             if (ViewModel != null)
+            {
                 d(ViewModel.TrackPlayer.StateChange.Subscribe(ChangePlayButtonIcon));
+                d(ViewModel.TrackPlayer.PlayAsyncCommand.IsExecuting.Subscribe(DisableTrackList));
+            }
         });
         AvaloniaXamlLoader.Load(this);
     }
@@ -42,27 +45,19 @@ public partial class TracksView : ReactiveUserControl<TracksViewModel>
         if (ViewModel == null ||
             args.Item1 == PlaybackState.Nothing) return;
 
-        // I haven't figured out something better yet...
-        // Find the current track in the visual elements (to change the button icon)
-        Button? playingTrackButton = null;
-        var pageLabels = this.GetVisualDescendants().OfType<Label>();
-        foreach (var label in pageLabels)
-        {
-            // Find the Label with the name of the current track
-            if (!label.Content.Equals(args.Item2.Title)) continue;
-            // In the Grid where the Label is located, find the button that we are looking for
-            if (label.Parent is not Grid grid) continue;
-
-            var panelButtons = grid.GetVisualDescendants().OfType<Button>();
-            foreach (var button in panelButtons)
-            {
-                if (!(button.Classes.Contains("Play-button") | button.Classes.Contains("Pause-button"))) continue;
-                playingTrackButton = button;
-                break;
-            }
-        }
+        var playingTrackButton = FindPlayingTrackButton(args.Item2.Title);
 
         if (playingTrackButton == null) return;
+
+        // The pause button should only be shown on the playing track
+        var buttons = this.GetVisualDescendants().OfType<Button>();
+        foreach (var button in buttons)
+        {
+            if (!button.Classes.Contains("Pause-button")) continue;
+
+            button.Classes.Remove("Pause-button");
+            button.Classes.Add("Play-button");
+        }
 
         // Change button icon
         if (args.Item1 == PlaybackState.Playing)
@@ -75,6 +70,36 @@ public partial class TracksView : ReactiveUserControl<TracksViewModel>
             playingTrackButton.Classes.Remove("Pause-button");
             playingTrackButton.Classes.Add("Play-button");
         }
+    }
+
+    private Button? FindPlayingTrackButton(string trackTitle)
+    {
+        // I haven't figured out something better yet...
+        // Find the current track in the visual elements (to change the button icon)
+        Button? playingTrackButton = null;
+        var pageLabels = this.GetVisualDescendants().OfType<Label>();
+        foreach (var label in pageLabels)
+        {
+            // Find the Label with the name of the current track
+            if (!label.Content.Equals(trackTitle)) continue;
+            // In the Grid where the Label is located, find the button that we are looking for
+            if (label.Parent is not Grid grid) continue;
+
+            var panelButtons = grid.GetVisualDescendants().OfType<Button>();
+            foreach (var button in panelButtons)
+            {
+                if (!(button.Classes.Contains("Play-button") | button.Classes.Contains("Pause-button"))) continue;
+                playingTrackButton = button;
+                break;
+            }
+        }
+
+        return playingTrackButton;
+    }
+
+    private void DisableTrackList(bool disable)
+    {
+        FindTracksListBox.IsEnabled = !disable;
     }
 
 #endregion
