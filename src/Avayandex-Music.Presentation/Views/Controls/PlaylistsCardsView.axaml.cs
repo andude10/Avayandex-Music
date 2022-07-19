@@ -1,4 +1,3 @@
-using Aura.UI.Controls;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avayandex_Music.Presentation.ViewModels.Controls;
@@ -13,15 +12,15 @@ public partial class PlaylistsCardsView : ReactiveUserControl<CardsViewModel<YPl
         this.WhenActivated(d =>
         {
             d(this.OneWayBind(ViewModel, vm => vm.CardCollection,
-                view => view.FindPlaylistsCardCollection.Items));
+                view => view.FindPlaylistsCardsListBox.Items));
         });
         AvaloniaXamlLoader.Load(this);
     }
 
 #region Find Properties
 
-    public CardCollection FindPlaylistsCardCollection =>
-        this.FindControl<CardCollection>("PlaylistsCardCollection");
+    public ListBox FindPlaylistsCardsListBox =>
+        this.FindControl<ListBox>(nameof(PlaylistsCardsListBox));
 
 #endregion
 }

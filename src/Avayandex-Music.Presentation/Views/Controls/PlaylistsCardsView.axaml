@@ -4,9 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Avayandex_Music.Presentation.Views.Controls.PlaylistsCardsView">
-    <CardCollection x:Name="PlaylistsCardCollection"
-                    Header=""
-                    ShowHeader="False"
-                    TileMode="HorizontalDisposition"
-                    Height="400" />
+    <ListBox x:Name="PlaylistsCardsListBox"
+             Classes="Cards-list" />
 </UserControl>

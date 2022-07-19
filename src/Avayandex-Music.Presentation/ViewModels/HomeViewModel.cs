@@ -34,7 +34,8 @@ public class HomeViewModel : ViewModelBase, IRoutableViewModel
             Header = playlist.Title,
             SecondaryHeader = playlist.Description,
             Command = playlistCardCommand,
-            CommandParameter = playlist.Title
+            CommandParameter = playlist.Title,
+            CoverType = playlist.Cover
         });
 
         RecommendedEpisodesViewModel = new ListViewModel<YTrack>();
