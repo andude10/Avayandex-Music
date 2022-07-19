@@ -1,34 +1,139 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Avayandex_Music.Presentation.ViewModels.Controls">
     <Styles.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="/Assets/Styles/Constants.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="TracksListItemBackground" Color="White" />
+            <SolidColorBrush x:Key="ListItemBackground" Color="White" />
         </ResourceDictionary>
     </Styles.Resources>
     <StyleInclude Source="avares://SukiUI/Theme/Index.xaml" />
 
     <Design.PreviewWith>
-        <StackPanel Margin="20">
-            <ListBox Classes="Tracks-list"
-                     Width="200" Height="250">
-                <ListBox.Items>
-                    <ListBoxItem>Item1</ListBoxItem>
-                    <ListBoxItem>Item2</ListBoxItem>
-                    <ListBoxItem>Item3</ListBoxItem>
-                    <ListBoxItem>Item1</ListBoxItem>
-                    <ListBoxItem>Item2</ListBoxItem>
-                    <ListBoxItem>Item3</ListBoxItem>
-                    <ListBoxItem>Item1</ListBoxItem>
-                    <ListBoxItem>Item2</ListBoxItem>
-                    <ListBoxItem>Item3</ListBoxItem>
-                </ListBox.Items>
-            </ListBox>
+        <StackPanel Margin="20" Orientation="Horizontal">
+            <StackPanel>
+                <Label HorizontalAlignment="Center">Tracks-list</Label>
+                <ListBox Classes="Tracks-list"
+                         Width="200" Height="250">
+                    <ListBox.Items>
+                        <ListBoxItem>Item1</ListBoxItem>
+                        <ListBoxItem>Item2</ListBoxItem>
+                        <ListBoxItem>Item3</ListBoxItem>
+                        <ListBoxItem>Item1</ListBoxItem>
+                        <ListBoxItem>Item2</ListBoxItem>
+                        <ListBoxItem>Item3</ListBoxItem>
+                        <ListBoxItem>Item1</ListBoxItem>
+                        <ListBoxItem>Item2</ListBoxItem>
+                        <ListBoxItem>Item3</ListBoxItem>
+                    </ListBox.Items>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel>
+                <Label HorizontalAlignment="Center">Cards-list</Label>
+                <ListBox Classes="Cards-list"
+                         Width="600" Height="250">
+                    <ListBox.Items>
+                        <controls:CardControlViewModel Header="Help"
+                                                       SecondaryHeader="Beatles" />
+                        <controls:CardControlViewModel />
+                        <controls:CardControlViewModel />
+                    </ListBox.Items>
+                </ListBox>
+            </StackPanel>
         </StackPanel>
     </Design.PreviewWith>
+
+    <!-- CardView -->
+    <Style Selector="ListBox.Cards-list">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="ItemsPanel">
+            <ItemsPanelTemplate>
+                <WrapPanel />
+            </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <DataTemplate DataType="controls:CardControlViewModel">
+                <Button Background="{StaticResource ListItemBackground}"
+                        BorderThickness="0"
+                        Height="310"
+                        Width="240"
+                        Command="{Binding Command}"
+                        CommandParameter="{Binding Header}">
+                    <Grid RowDefinitions="*, Auto">
+                        <Image Source="{Binding CoverBitmap}"
+                               Width="240"
+                               Height="240" />
+                        <StackPanel HorizontalAlignment="Center"
+                                    Grid.Row="1"
+                                    Margin="3,10,3,3">
+                            <TextBlock Text="{Binding Header}"
+                                       FontSize="{StaticResource DefLargeFontSize}"
+                                       Margin="2" />
+                            <TextBlock Text="{Binding SecondaryHeader}"
+                                       FontSize="{StaticResource DefNormalFontSize}"
+                                       Margin="2"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
+                </Button>
+            </DataTemplate>
+        </Setter>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="border"
+                        ClipToBounds="{TemplateBinding ClipToBounds}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="0"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                    <ScrollViewer Name="PART_ScrollViewer"
+                                  HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                  VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+                        <ItemsPresenter Name="PART_ItemsPresenter"
+                                        Items="{TemplateBinding Items}"
+                                        ItemsPanel="{TemplateBinding ItemsPanel}"
+                                        ItemTemplate="{TemplateBinding ItemTemplate}"
+                                        Margin="{TemplateBinding Padding}"
+                                        VirtualizationMode="{TemplateBinding VirtualizationMode}" />
+                    </ScrollViewer>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="ListBox.Cards-list ListBoxItem">
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="Background" Value="{StaticResource ListItemBackground}" />
+        <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Background="Transparent"
+                                  BorderBrush="Transparent"
+                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                  CornerRadius="{TemplateBinding CornerRadius}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Content="{TemplateBinding Content}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+            </ControlTemplate>
+        </Setter>
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="ListBox.Cards-list ListBoxItem">
+        <Setter Property="RenderTransform" Value="scale(1)" />
+    </Style>
+    <Style Selector="ListBox.Cards-list ListBoxItem:pointerover">
+        <Setter Property="RenderTransform" Value="scale(1.05)" />
+    </Style>
 
     <!-- TracksView -->
     <Style Selector="ListBox.Tracks-list">
@@ -38,7 +143,7 @@
     <Style Selector="ListBox.Tracks-list ListBoxItem">
         <Setter Property="Margin" Value="20,10,20,10" />
         <Setter Property="Padding" Value="2" />
-        <Setter Property="Background" Value="{StaticResource TracksListItemBackground}" />
+        <Setter Property="Background" Value="{StaticResource ListItemBackground}" />
         <Setter Property="CornerRadius" Value="{StaticResource DefCornerRadius}" />
         <Setter Property="Template">
             <ControlTemplate>
