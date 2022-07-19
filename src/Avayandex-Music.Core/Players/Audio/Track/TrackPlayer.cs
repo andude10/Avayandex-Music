@@ -136,6 +136,7 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
 
             var filePath = await _storage.LoadTrackAsync(SelectedTrack);
 
+            PlaybackAudio.Dispose();
             PlaybackAudio = _playbackAudio.CreatePlayback(filePath);
             PlaybackAudio.Play();
         }
@@ -151,6 +152,7 @@ public class TrackPlayer : ReactiveObject, ITrackPlayer
     {
         if (SelectedTrack == null) throw new InvalidOperationException();
         _playbackAudio.Stop();
+        _playbackAudio.Dispose();
     }
 
     private void SelectNext()
