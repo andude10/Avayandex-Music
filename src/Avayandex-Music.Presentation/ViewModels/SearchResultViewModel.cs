@@ -4,6 +4,7 @@ using DynamicData;
 using Yandex.Music.Api;
 using Yandex.Music.Api.Models.Album;
 using Yandex.Music.Api.Models.Artist;
+using Yandex.Music.Api.Models.Common.Cover;
 using Yandex.Music.Api.Models.Playlist;
 using Yandex.Music.Api.Models.Track;
 
@@ -93,17 +94,19 @@ public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
         ArtistsCardsViewModel = new CardsViewModel<YArtist>(artist => new CardControlViewModel
         {
             Header = artist.Name,
-            SecondaryHeader = artist.Description
+            SecondaryHeader = string.Join(", ", artist.Genres),
+            Cover = artist.Cover
         });
         PlaylistsCardsViewModel = new CardsViewModel<YPlaylist>(playlist => new CardControlViewModel
         {
             Header = playlist.Title,
-            SecondaryHeader = playlist.Description
+            Cover = playlist.Cover
         });
         AlbumsCardsViewModel = new CardsViewModel<YAlbum>(album => new CardControlViewModel
         {
             Header = album.Title,
-            SecondaryHeader = album.ReleaseDate
+            SecondaryHeader = string.Join(", ", album.Artists.Select(artist => artist.Name)),
+            Cover = new YCoverImage {Uri = album.CoverUri}
         });
 
         TracksViewModel = new ListViewModel<YTrack>();
