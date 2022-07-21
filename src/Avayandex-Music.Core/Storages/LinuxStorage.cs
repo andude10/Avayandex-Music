@@ -19,30 +19,50 @@ public class LinuxStorage : Storage
         if (!Directory.Exists(StorageDirectory)) Directory.CreateDirectory(StorageDirectory);
     }
 
-    private static bool CacheExists(string path)
-    {
-        var storageDirectory = new DirectoryInfo(StorageDirectory);
-        var filesInDir = storageDirectory.GetFiles()
-            .Select(file => file.Name);
+#region Public methods
 
-        return filesInDir.Contains(new FileInfo(path).Name);
+    public override async Task<string> LoadTrackAsync(YTrack track)
+    {
+        var api = new YandexMusicApi();
+        var authStorage = AuthStorageService.GetInstance();
+
+        var path = BuildFilePath(CreateId(track), TrackFileFormat);
+
+        return CacheExists(path)
+            ? path
+            : await DownloadTrack(track, api, authStorage, path);
     }
 
-    private static string BuildFilePath(string id, string fileFormat)
+    /// <summary>
+    ///     Get the path to the Cover png file.
+    ///     Downloads a file if it is not in the cache.
+    /// </summary>
+    /// <param name="cover"></param>
+    /// <returns>The path to the png file, or null if an error occurred while uploading the file</returns>
+    /// <exception cref="NotSupportedException">Throws if the cover has an invalid type</exception>
+    public override async Task<string?> LoadCoverAsync(YCover cover)
     {
-        return Path.Combine(StorageDirectory, id) + fileFormat;
-    }
+        if (cover is YCoverError) return null;
 
-    private static string CreateId(object obj)
-    {
-        return obj switch
+        var path = BuildFilePath(CreateId(cover), CoverFileFormat);
+
+        var uri = cover switch
         {
-            YTrack track => track.Id,
-            YCoverPic pic => pic.Dir.Split('/')[2],
-
+            YCoverPic pic => new Uri($"{Endpoints.YandexAvatars}{pic.Dir}/{Endpoints.AvatarMiddleSize}"),
+            YCoverMosaic mosaic => new Uri($"{mosaic.ItemsUri}/{Endpoints.AvatarMiddleSize}"),
+            YCoverImage image => new Uri($"{image.Uri}/{Endpoints.AvatarMiddleSize}"),
             _ => throw new NotSupportedException()
         };
+
+        await DownloadCover(uri, path);
+        return path;
     }
+
+#endregion
+
+#region Helper static methods
+
+#region Download methods
 
     private static async Task<string> DownloadTrack(YTrack track, YandexMusicApi api, AuthStorage authStorage,
         string path)
@@ -58,46 +78,15 @@ public class LinuxStorage : Storage
         return path;
     }
 
-    private static async Task<string> DownloadCover(YCoverPic coverPic, string path)
+    private static async Task<string> DownloadCover(Uri downloadUri, string path)
     {
-        var uri = new Uri($"{Endpoints.YandexAvatars}{coverPic.Dir}/{Endpoints.AvatarMiddleSize}");
-
         using var httpClient = new HttpClient();
 
-        var imageBytes = await httpClient.GetByteArrayAsync(uri);
+        var imageBytes = await httpClient.GetByteArrayAsync(downloadUri);
         await File.WriteAllBytesAsync(path, imageBytes);
 
         return path;
     }
-
-#region Public methods
-
-    public override async Task<string> LoadTrackAsync(YTrack track)
-    {
-        var api = new YandexMusicApi();
-        var authStorage = AuthStorageService.GetInstance();
-
-        var path = BuildFilePath(CreateId(track), TrackFileFormat);
-
-        return CacheExists(path)
-            ? path
-            : await DownloadTrack(track, api, authStorage, path);
-    }
-
-    public override async Task<string> LoadCoverAsync(YCover cover)
-    {
-        var path = BuildFilePath(CreateId(cover), CoverFileFormat);
-
-        if (cover is not YCoverPic pic) throw new NotSupportedException();
-
-        return CacheExists(path)
-            ? path
-            : await DownloadCover(pic, path);
-    }
-
-#endregion
-
-#region Helper static methods
 
     private static async Task HttpDownloadTrackAsync(HttpClient httpClient, string url, string path)
     {
@@ -127,6 +116,45 @@ public class LinuxStorage : Storage
 
         return link;
     }
+
+#endregion
+
+#region Cache interaction methods
+
+    private static bool CacheExists(string path)
+    {
+        var storageDirectory = new DirectoryInfo(StorageDirectory);
+        var filesInDir = storageDirectory.GetFiles()
+            .Select(file => file.Name);
+
+        return filesInDir.Contains(new FileInfo(path).Name);
+    }
+
+    private static string BuildFilePath(string id, string fileFormat)
+    {
+        return Path.Combine(StorageDirectory, id) + fileFormat;
+    }
+
+    private static string CreateId(object obj)
+    {
+        return obj switch
+        {
+            YTrack track => track.Id,
+            YCoverPic pic => pic.Uri.Replace('/', 'l')
+                .Remove(0, pic.Uri.Length / 2)
+                .Normalize(),
+            YCoverMosaic mosaic => mosaic.ItemsUri.First().Replace('/', 'l')
+                .Remove(0, mosaic.ItemsUri.First().Length / 2)
+                .Normalize(),
+            YCoverImage image => image.Uri.Replace('/', 'l')
+                .Remove(0, image.Uri.Length / 2)
+                .Normalize(),
+
+            _ => throw new NotSupportedException(obj.GetType().ToString())
+        };
+    }
+
+#endregion
 
 #endregion
 }

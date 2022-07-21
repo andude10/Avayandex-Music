@@ -19,9 +19,11 @@ public abstract class Storage
     public abstract Task<string> LoadTrackAsync(YTrack track);
 
     /// <summary>
-    ///     Loads cover into the storage and returns the full file name
+    ///     Get the path to the Cover png file.
+    ///     Downloads a file if it is not in the cache.
     /// </summary>
     /// <param name="cover"></param>
-    /// <returns></returns>
-    public abstract Task<string> LoadCoverAsync(YCover cover);
+    /// <returns>The path to the png file, or null if an error occurred while uploading the file</returns>
+    /// <exception cref="NotSupportedException">Throws if the cover has an invalid type</exception>
+    public abstract Task<string?> LoadCoverAsync(YCover cover);
 }
