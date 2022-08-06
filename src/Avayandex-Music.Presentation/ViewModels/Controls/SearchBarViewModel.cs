@@ -17,13 +17,19 @@ public class SearchBarViewModel : ViewModelBase
             .Bind(out _suggestionsCollection)
             .Subscribe();
 
-        GetSuggestionsCommand = ReactiveCommand.CreateFromTask(GetSuggestions);
+        GetSuggestionsCommand = ReactiveCommand.CreateFromObservable(() => 
+            Observable.StartAsync(GetSuggestions)
+                .TakeUntil(CancelGetSuggestionsCommand));
+        CancelGetSuggestionsCommand = ReactiveCommand.Create(() => { }, GetSuggestionsCommand.IsExecuting);
+        
         NavigateToSearchResultCommand = ReactiveCommand.Create(NavigateToSearchResult);
 
-        this.WhenAnyValue(vm => vm.SearchText)
-            .Throttle(TimeSpan.FromMilliseconds(300))
-            .Select(_ => Unit.Default)
-            .InvokeCommand(this, vm => vm.GetSuggestionsCommand);
+        var searchTextObservable = this.WhenAnyValue(vm => vm.SearchText)
+            .ObserveOn(RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromTicks(500))
+            .Select(_ => Unit.Default);
+        searchTextObservable.InvokeCommand(this, vm => vm.CancelGetSuggestionsCommand);
+        searchTextObservable.InvokeCommand(this, vm => vm.GetSuggestionsCommand); // send suggestions request
     }
 
 #region Fields
@@ -50,18 +56,24 @@ public class SearchBarViewModel : ViewModelBase
 #region Commands
 
     public ReactiveCommand<Unit, Unit> GetSuggestionsCommand { get; }
+    public ReactiveCommand<Unit, Unit> CancelGetSuggestionsCommand { get; }
     public ReactiveCommand<Unit, Unit> NavigateToSearchResultCommand { get; }
 
 #endregion
 
 #region Methods
 
-    private async Task GetSuggestions()
+    private async Task GetSuggestions(CancellationToken cancellationToken)
     {
         var api = new YandexMusicApi();
         var storage = AuthStorageService.GetInstance();
 
-        var response = await api.Search.SuggestAsync(storage, _searchText);
+        var searchText = _searchText;
+        var response = await api.Search.SuggestAsync(storage, searchText);
+
+        Console.WriteLine($"GetSuggestions '{searchText}': IsCancellationRequested: {cancellationToken.IsCancellationRequested}");
+        cancellationToken.ThrowIfCancellationRequested();
+
         _searchSuggestions.Clear();
         _searchSuggestions.AddRange(response.Result.Suggestions);
     }

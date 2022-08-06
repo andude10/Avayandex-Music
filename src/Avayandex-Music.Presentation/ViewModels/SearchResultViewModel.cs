@@ -4,8 +4,15 @@ using DynamicData;
 using Yandex.Music.Api;
 using Yandex.Music.Api.Models.Album;
 using Yandex.Music.Api.Models.Artist;
+using Yandex.Music.Api.Models.Common;
 using Yandex.Music.Api.Models.Common.Cover;
 using Yandex.Music.Api.Models.Playlist;
+using Yandex.Music.Api.Models.Search;
+using Yandex.Music.Api.Models.Search.Album;
+using Yandex.Music.Api.Models.Search.Artist;
+using Yandex.Music.Api.Models.Search.Playlist;
+using Yandex.Music.Api.Models.Search.PodcastEpisode;
+using Yandex.Music.Api.Models.Search.Track;
 using Yandex.Music.Api.Models.Track;
 
 namespace Avayandex_Music.Presentation.ViewModels;
@@ -40,6 +47,7 @@ public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
     private CardsViewModel<YArtist> _artistsCardsViewModel;
     private CardsViewModel<YPlaylist> _playlistsCardsView;
     private CardsViewModel<YAlbum> _albumsCardsViewModel;
+    private ListViewModel<YTrack> _podcastsCardsViewModel;
     private ListViewModel<YTrack> _tracksViewModel;
 
 #endregion
@@ -68,6 +76,12 @@ public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
     {
         get => _albumsCardsViewModel;
         set => this.RaiseAndSetIfChanged(ref _albumsCardsViewModel, value);
+    }
+
+    public ListViewModel<YTrack> PodcastCardsViewModel
+    {
+        get => _podcastsCardsViewModel;
+        set => this.RaiseAndSetIfChanged(ref _podcastsCardsViewModel, value);
     }
 
     public ListViewModel<YTrack> TracksViewModel
@@ -109,33 +123,65 @@ public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
             Cover = new YCoverImage {Uri = album.CoverUri}
         });
 
+        PodcastCardsViewModel = new ListViewModel<YTrack>();
         TracksViewModel = new ListViewModel<YTrack>();
     }
 
     private async Task SearchAsync()
     {
-        var searchTasks = new List<Task>
-        {
-            SearchArtistsAsync(),
-            SearchPlaylistsAsync(),
-            SearchAlbumsAsync(),
-            SearchTracksAsync()
-        };
+        var api = new YandexMusicApi();
+        var storage = AuthStorageService.GetInstance();
 
-        while (searchTasks.Any())
+        var searchResponse = await api.Search.SearchAsync(storage, SearchBarViewModel.SearchText, YSearchType.All);
+
+        if (searchResponse == null) return;
+
+        var downloadTasks = new List<Task>();
+
+        if (searchResponse.Result.Podcast_Episodes != null)
+            downloadTasks.Add(DownloadPodcastEpisodeAsync(searchResponse.Result.Podcast_Episodes));
+        if (searchResponse.Result.Artists != null)
+            downloadTasks.Add(DownloadArtistsAsync(searchResponse.Result.Artists));
+        if (searchResponse.Result.Albums != null)
+            downloadTasks.Add(DownloadAlbumsAsync(searchResponse.Result.Albums));
+        if (searchResponse.Result.Playlists != null)
+            downloadTasks.Add(DownloadPlaylistsAsync(searchResponse.Result.Playlists));
+        if (searchResponse.Result.Tracks != null)
+            downloadTasks.Add(DownloadTracksAsync(searchResponse.Result.Tracks));
+
+        while (downloadTasks.Any())
         {
-            var finishedTask = await Task.WhenAny(searchTasks);
-            searchTasks.Remove(finishedTask);
+            var finishedTask = await Task.WhenAny(downloadTasks);
+            downloadTasks.Remove(finishedTask);
         }
     }
 
-    private async Task SearchArtistsAsync()
+    private async Task DownloadPodcastEpisodeAsync(YSearchResult<YSearchPodcastEpisodeModel> searchResult)
     {
         var api = new YandexMusicApi();
         var storage = AuthStorageService.GetInstance();
 
-        var searchResponse = await api.Search.ArtistAsync(storage, SearchBarViewModel.SearchText);
-        var artistsIds = searchResponse.Result.Artists.Results.ConvertAll(model => model.Id);
+        var podcastsIds = searchResult.Results.ConvertAll(model => model.Id);
+
+        var getRequestsTasks = podcastsIds.Select(id => api.Track.GetAsync(storage, id)).ToList();
+
+        while (getRequestsTasks.Any())
+        {
+            var finishedTask = await Task.WhenAny(getRequestsTasks);
+            getRequestsTasks.Remove(finishedTask);
+
+            var response = await finishedTask;
+
+            if (response != null) TracksViewModel.Source.AddRange(response.Result);
+        }
+    }
+
+    private async Task DownloadArtistsAsync(YSearchResult<YSearchArtistModel> searchResult)
+    {
+        var api = new YandexMusicApi();
+        var storage = AuthStorageService.GetInstance();
+
+        var artistsIds = searchResult.Results.ConvertAll(model => model.Id);
 
         var getRequestsTasks = artistsIds.Select(id => api.Artist.GetAsync(storage, id)).ToList();
 
@@ -144,19 +190,18 @@ public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
             var finishedTask = await Task.WhenAny(getRequestsTasks);
             getRequestsTasks.Remove(finishedTask);
 
-            var response = finishedTask.Result;
+            var response = await finishedTask;
 
             if (response != null) ArtistsCardsViewModel.Source.Add(response.Result.Artist);
         }
     }
 
-    private async Task SearchPlaylistsAsync()
+    private async Task DownloadPlaylistsAsync(YSearchResult<YSearchPlaylistModel> searchResult)
     {
         var api = new YandexMusicApi();
         var storage = AuthStorageService.GetInstance();
 
-        var searchResponse = await api.Search.PlaylistAsync(storage, SearchBarViewModel.SearchText);
-        var infos = searchResponse.Result.Playlists.Results.ConvertAll(model => new YPlaylist
+        var infos = searchResult.Results.ConvertAll(model => new YPlaylist
         {
             Kind = model.Kind,
             Owner = model.Owner
@@ -169,19 +214,18 @@ public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
             var finishedTask = await Task.WhenAny(getRequestsTasks);
             getRequestsTasks.Remove(finishedTask);
 
-            var response = finishedTask.Result;
+            var response = await finishedTask;
 
             if (response != null) PlaylistsCardsViewModel.Source.Add(response.Result);
         }
     }
 
-    private async Task SearchAlbumsAsync()
+    private async Task DownloadAlbumsAsync(YSearchResult<YSearchAlbumModel> searchResult)
     {
         var api = new YandexMusicApi();
         var storage = AuthStorageService.GetInstance();
 
-        var searchResponse = await api.Search.AlbumsAsync(storage, SearchBarViewModel.SearchText);
-        var albumsIds = searchResponse.Result.Albums.Results.ConvertAll(model => model.Id);
+        var albumsIds = searchResult.Results.ConvertAll(model => model.Id);
 
         var getRequestsTasks = albumsIds.Select(id => api.Album.GetAsync(storage, id)).ToList();
 
@@ -190,19 +234,18 @@ public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
             var finishedTask = await Task.WhenAny(getRequestsTasks);
             getRequestsTasks.Remove(finishedTask);
 
-            var response = finishedTask.Result;
+            var response = await finishedTask;
 
             if (response != null) AlbumsCardsViewModel.Source.Add(response.Result);
         }
     }
 
-    private async Task SearchTracksAsync()
+    private async Task DownloadTracksAsync(YSearchResult<YSearchTrackModel> searchResult)
     {
         var api = new YandexMusicApi();
         var storage = AuthStorageService.GetInstance();
 
-        var searchResponse = await api.Search.TrackAsync(storage, SearchBarViewModel.SearchText);
-        var tracksIds = searchResponse.Result.Tracks.Results.ConvertAll(model => model.Id);
+        var tracksIds = searchResult.Results.ConvertAll(model => model.Id);
 
         var getRequestsTasks = tracksIds.Select(id => api.Track.GetAsync(storage, id)).ToList();
 
@@ -211,7 +254,7 @@ public class SearchResultViewModel : ViewModelBase, IRoutableViewModel
             var finishedTask = await Task.WhenAny(getRequestsTasks);
             getRequestsTasks.Remove(finishedTask);
 
-            var response = finishedTask.Result;
+            var response = await finishedTask;
 
             if (response != null) TracksViewModel.Source.AddRange(response.Result);
         }
