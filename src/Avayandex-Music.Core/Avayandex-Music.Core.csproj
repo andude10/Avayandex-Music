@@ -8,19 +8,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="KM.Yandex.Music.Api" Version="1.0.0"/>
-        <PackageReference Include="LibVLCSharp" Version="3.6.6"/>
-        <PackageReference Include="ReactiveUI" Version="18.2.9"/>
+        <PackageReference Include="KM.Yandex.Music.Api" Version="1.0.0" />
+        <PackageReference Include="LibVLCSharp" Version="3.6.6" />
+        <PackageReference Include="ReactiveUI" Version="18.3.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="ReactiveUI"/>
-        <Using Include="System.Reactive"/>
-        <Using Include="Yandex.Music.Api"/>
-        <Using Include="Yandex.Music.Api.Models.Track"/>
+        <Using Include="ReactiveUI" />
+        <Using Include="System.Reactive" />
+        <Using Include="Yandex.Music.Api" />
+        <Using Include="Yandex.Music.Api.Models.Track" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\libs\Yandex.Music.Api\Yandex.Music.Api\Yandex.Music.Api.csproj"/>
+        <ProjectReference Include="..\..\libs\Yandex.Music.Api\Yandex.Music.Api\Yandex.Music.Api.csproj" />
     </ItemGroup>
 </Project>
